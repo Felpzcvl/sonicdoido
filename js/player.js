@@ -17,7 +17,7 @@
   S.Player = {};
 
   S.Player.create = function (charId, x, y) {
-    var def = S.Gfx.CHARS[charId] || S.Gfx.CHARS.sonic;
+    var def = S.Gfx.CHARS[charId] || S.Gfx.CHARS.bolsonaro;
     var p = {
       charId: charId, def: def,
       x: x, y: y, prevY: y,
@@ -50,7 +50,7 @@
       if (this.spindash) return true;
       if (this.rolling) return true;
       if (!this.grounded && this.jumping && !this.flying) return true;
-      if (this.charId === 'knuckles' && this.gliding) return true;
+      if (this.charId === 'lula' && this.gliding) return true;
       return false;
     };
 
@@ -356,7 +356,7 @@
     S.Player.wallCollide(p, lv);
     S.Player.ceilCollide(p, lv);
 
-    if (p.gliding && p.wallSide && p.charId === 'knuckles') {
+    if (p.gliding && p.wallSide && p.charId === 'lula') {
       p.gliding = false; p.climbing = true;
       p.vy = 0; p.vx = 0; p.face = p.wallSide;
       S.Audio.sfx('glide');
@@ -396,7 +396,7 @@
     var In = S.Input;
     if (!ctrl) return;
 
-    if (p.charId === 'tails') {
+    if (p.charId === 'renan') {
       if (In.pressed('jump') && !p.flying && p.jumping) {
         p.flying = true; p.jumping = false; p.flyTimer = 500; p.flyUp = 26;
         S.Audio.sfx('fly');
@@ -408,7 +408,7 @@
       return;
     }
 
-    if (p.charId === 'knuckles') {
+    if (p.charId === 'lula') {
       if (In.pressed('jump') && !p.gliding && !p.climbing && p.jumping) {
         p.gliding = true; p.jumping = false;
         p.vy = 0; p.glideSpd = 4.2;

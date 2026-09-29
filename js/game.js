@@ -22,6 +22,7 @@
       S.Save.load();
       S.Audio.setMusicVol(S.Save.data.options.music);
       S.Audio.setSfxVol(S.Save.data.options.sfx);
+      S.Audio.preloadVoices();
       S.Input.init(this.canvas);
       this.resize();
       var self = this;

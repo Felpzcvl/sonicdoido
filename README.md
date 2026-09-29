@@ -40,11 +40,17 @@ Também funciona com **controle (gamepad)** e com **botões na tela** no celular
 
 ## Personagens
 
+Caricaturas desenhadas por código (nenhuma imagem externa), cada uma com sua
+própria fala tocada na tela de seleção.
+
 | Personagem | Habilidade |
 |---|---|
-| **Sonic** | O mais rápido. Spin Dash + **Drop Dash** (segure o pulo no ar) |
-| **Tails** | **Voo**: aperte o pulo de novo no ar e continue apertando |
-| **Knuckles** | **Planar e escalar** paredes; quebra blocos com o soco |
+| **Lula** | **Planar e escalar** paredes; quebra blocos no impacto |
+| **Bolsonaro** | O mais rápido. Spin Dash + **Drop Dash** (segure o pulo no ar) |
+| **Renan Santos** | **Impulso aéreo**: aperte o pulo de novo no ar e continue apertando |
+
+As vozes ficam em `audio/` (`lula.mp3`, `bolsonaro.mp3`, `renan.mp3`) — troque os
+arquivos mantendo os nomes para mudar as falas.
 
 ---
 
@@ -65,6 +71,7 @@ Também funciona com **controle (gamepad)** e com **botões na tela** no celular
   fim de jogo/continue e final do jogo
 - Progresso salvo no navegador (fases liberadas, esmeraldas, recordes de tempo e
   pontuação, opções)
+- Menus com cenário da Praça dos Três Poderes ao pôr do sol, desenhado em código
 
 ---
 
@@ -104,6 +111,7 @@ js/hud.js           interface da fase
 js/ui.js            componentes de menu
 js/special.js       fase especial (túnel)
 js/screens.js       todas as telas
+audio/              falas dos personagens (MP3)
 js/game.js          laço principal, câmera e sessão
 ```
 

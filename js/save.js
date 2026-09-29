@@ -13,7 +13,7 @@
     bestTimes: {},           // actId -> frames
     bestScores: {},          // actId -> score
     cleared: {},             // actId -> true
-    favChar: 'sonic',
+    favChar: 'lula',
     seenIntro: false,
     totalRings: 0,
     options: {
@@ -41,6 +41,8 @@
           this.data = this.merge(clone(DEFAULTS), d);
         }
       } catch (e) { this.data = clone(DEFAULTS); }
+      // personagem salvo de uma versao antiga
+      if (window.S.Gfx && !window.S.Gfx.CHARS[this.data.favChar]) this.data.favChar = DEFAULTS.favChar;
       return this.data;
     },
 

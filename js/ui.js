@@ -104,8 +104,8 @@
     ctx.save();
     ctx.globalAlpha = selected ? 1 : .72;
     var g = ctx.createLinearGradient(0, y, 0, y + h);
-    g.addColorStop(0, S.shade(c.body, .1));
-    g.addColorStop(1, S.shade(c.dark, -.45));
+    g.addColorStop(0, S.shade(c.card || c.body, .12));
+    g.addColorStop(1, S.shade(c.card || c.dark, -.55));
     ctx.fillStyle = g;
     S.roundRect(ctx, x, y, w, h, 12); ctx.fill();
     ctx.lineWidth = selected ? 4 : 2;

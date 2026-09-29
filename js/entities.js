@@ -130,7 +130,7 @@
       var pb = p.hitbox(), mb = E.box(this);
       if (!S.aabb(mb, pb)) return;
       var breaking = p.rolling || (!p.grounded && p.jumping) || p.invincTimer > 0 ||
-                     p.superForm || (p.charId === 'knuckles' && p.gliding);
+                     p.superForm || (p.charId === 'lula' && p.gliding);
       if (breaking) { this.pop(g, p); return; }
       if (p.vy >= 0 && pb.y + pb.h - Math.max(1, p.vy) <= mb.y + 8) { p.landOn(mb.y); }
       else {
@@ -147,7 +147,7 @@
       g.giveItem(this.item, this.x, this.y - 22);
     };
     e.draw = function (ctx, cam) {
-      var cid = S.Game.session ? S.Game.session.charId : 'sonic';
+      var cid = S.Game.session ? S.Game.session.charId : 'bolsonaro';
       S.Gfx.itemBox(ctx, this.x - cam.x, this.y - 15 - cam.y, this.item, this.t, this.broken > 0, cid);
     };
     return e;
@@ -246,7 +246,7 @@
       g.finishAct();
     };
     e.draw = function (ctx, cam) {
-      var cid = S.Game.session ? S.Game.session.charId : 'sonic';
+      var cid = S.Game.session ? S.Game.session.charId : 'bolsonaro';
       S.Gfx.goalSign(ctx, this.x - cam.x, this.y - cam.y, this.spin, 1, cid);
     };
     return e;

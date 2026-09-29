@@ -4,13 +4,15 @@ const root = __dirname;
 const types = {
   '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
   '.css': 'text/css; charset=utf-8', '.json': 'application/json',
-  '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.ico': 'image/x-icon'
+  '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.ico': 'image/x-icon',
+  '.mp3': 'audio/mpeg', '.mpeg': 'audio/mpeg', '.ogg': 'audio/ogg', '.wav': 'audio/wav'
 };
 const port = process.env.PORT || 7788;
 http.createServer((req, res) => {
   let p = decodeURIComponent(req.url.split('?')[0]);
   if (p === '/') p = '/index.html';
-  const file = path.join(root, path.normalize(p).replace(/^(\.\.[\/\])+/, ''));
+  if (p.indexOf(String.fromCharCode(46,46)) >= 0) { res.writeHead(400); res.end(); return; }
+  const file = path.join(root, p);
   fs.readFile(file, (err, data) => {
     if (err) { res.writeHead(404, { 'Content-Type': 'text/plain' }); res.end('404'); return; }
     res.writeHead(200, { 'Content-Type': types[path.extname(file).toLowerCase()] || 'application/octet-stream' });

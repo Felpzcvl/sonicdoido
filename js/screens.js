@@ -59,20 +59,12 @@
     },
     draw: function (ctx, g) {
       var t = this.t;
-      S.Gfx.drawBackground(ctx, 'hill', { x: this.camx, y: 40 }, t);
-      // chão
-      ctx.fillStyle = '#c98a3c';
-      ctx.fillRect(0, S.H - 46, S.W, 46);
-      ctx.fillStyle = '#3fc34a';
-      ctx.fillRect(0, S.H - 46, S.W, 8);
-      ctx.fillStyle = '#7fe47c';
-      ctx.fillRect(0, S.H - 46, S.W, 3);
-
-      var chars = ['sonic', 'tails', 'knuckles'];
+      S.Gfx.drawBackground(ctx, 'congresso', { x: this.camx, y: 40 }, t);
+      var chars = ['lula', 'bolsonaro', 'renan'];
       for (var i = 0; i < 3; i++) {
         var x = ((t * 3.4 + i * 90) % (S.W + 160)) - 80;
         S.Gfx.drawChar(ctx, chars[i], {
-          x: x, y: S.H - 46, state: 'run', t: t * 1.5 + i * 7, facing: 1, scale: .9
+          x: x, y: 272, state: 'run', t: t * 1.5 + i * 7, facing: 1, scale: .9
         });
       }
 
@@ -103,7 +95,7 @@
         { label: 'NOVO JOGO' },
         { label: 'CONTINUAR', disabled: S.Save.data.unlockedAct === 0 },
         { label: 'SELECIONAR FASE' },
-        { label: 'PERSONAGEM', value: S.Gfx.CHARS[S.Save.data.favChar].name },
+        { label: 'PERSONAGEM', value: (S.Gfx.CHARS[S.Save.data.favChar] || S.Gfx.CHARS.lula).name },
         { label: 'OPCOES' },
         { label: 'CONTROLES' },
         { label: 'CREDITOS' }
@@ -131,7 +123,7 @@
     },
     draw: function (ctx, g) {
       var t = this.t;
-      S.Gfx.drawBackground(ctx, 'hill', { x: t * 1.1, y: 60 }, t);
+      S.Gfx.drawBackground(ctx, 'congresso', { x: t * 1.1, y: 60 }, t);
       S.UI.vignette(ctx, .55);
       S.UI.title(ctx, t, 62, .62);
       S.UI.panel(ctx, S.W / 2 - 170, 108, 340, 214);
@@ -145,7 +137,7 @@
 (function () {
   'use strict';
   var S = window.S, Sc = S.Screens;
-  var IDS = ['sonic', 'tails', 'knuckles'];
+  var IDS = ['lula', 'bolsonaro', 'renan'];
 
   Sc.charselect = {
     enter: function (g, o) {
@@ -153,13 +145,16 @@
       this.opts = o || {};
       this.sel = Math.max(0, IDS.indexOf(S.Save.data.favChar));
       S.Audio.playMusic('title');
+      S.Audio.voice(IDS[this.sel]);
     },
+    exit: function () { S.Audio.stopVoice(); },
     update: function (g) {
       this.t++;
       var In = S.Input;
       if (S.nav(this, 3, true)) {
         S.Save.data.favChar = IDS[this.sel];
         S.Save.save();
+        S.Audio.voice(IDS[this.sel]);
       }
       if (In.pressed('confirm')) {
         S.Audio.sfx('start');
@@ -178,7 +173,7 @@
     },
     draw: function (ctx, g) {
       var t = this.t;
-      S.Gfx.drawBackground(ctx, 'hill', { x: t * .8, y: 70 }, t);
+      S.Gfx.drawBackground(ctx, 'congresso', { x: t * .8, y: 70 }, t);
       S.UI.vignette(ctx, .6);
       S.text(ctx, 'ESCOLHA SEU HEROI', S.W / 2, 44, {
         size: 24, align: 'center', color: '#ffd23c', outline: '#3a1d00', outlineW: 5, shadow: false });
@@ -313,7 +308,7 @@
     },
     draw: function (ctx, g) {
       var t = this.t;
-      S.Gfx.drawBackground(ctx, 'fortress', { x: t * .5, y: 60 }, t);
+      S.Gfx.drawBackground(ctx, 'congresso', { x: t * .5, y: 60 }, t);
       S.UI.vignette(ctx, .65);
       S.text(ctx, 'OPCOES', S.W / 2, 40, {
         size: 24, align: 'center', color: '#ffd23c', outline: '#3a1d00', outlineW: 5, shadow: false });
@@ -337,7 +332,7 @@
     },
     draw: function (ctx, g) {
       var t = this.t;
-      S.Gfx.drawBackground(ctx, 'lagoon', { x: t * .5, y: 60 }, t);
+      S.Gfx.drawBackground(ctx, 'congresso', { x: t * .5, y: 60 }, t);
       S.UI.vignette(ctx, .65);
       S.text(ctx, 'COMO JOGAR', S.W / 2, 36, {
         size: 24, align: 'center', color: '#ffd23c', outline: '#3a1d00', outlineW: 5, shadow: false });
@@ -359,7 +354,7 @@
       }
       S.UI.panel(ctx, 334, 48, S.W - 358, 272);
       S.text(ctx, 'HABILIDADES', 352, 76, { size: 15, color: '#ffd23c', shadow: false });
-      var chars = ['sonic', 'tails', 'knuckles'];
+      var chars = ['lula', 'bolsonaro', 'renan'];
       for (var k = 0; k < 3; k++) {
         var c = S.Gfx.CHARS[chars[k]];
         var yy = 100 + k * 68;
@@ -413,7 +408,7 @@
     },
     draw: function (ctx, g) {
       var t = this.t;
-      S.Gfx.drawBackground(ctx, 'hill', { x: t * 1.4, y: 40 }, t);
+      S.Gfx.drawBackground(ctx, 'congresso', { x: t * 1.4, y: 40 }, t);
       S.UI.vignette(ctx, .7);
       var y = S.H + 10 - this.scroll;
       for (var i = 0; i < this.lines.length; i++) {
@@ -425,8 +420,8 @@
         }
         y += l[1] + 12;
       }
-      S.Gfx.drawChar(ctx, 'sonic', { x: 72, y: S.H - 10, state: 'idle', t: t, facing: 1, scale: .9 });
-      S.Gfx.drawChar(ctx, 'tails', { x: S.W - 72, y: S.H - 10, state: 'idle', t: t + 30, facing: -1, scale: .9 });
+      S.Gfx.drawChar(ctx, 'lula', { x: 64, y: 272, state: 'idle', t: t, facing: 1, scale: .82 });
+      S.Gfx.drawChar(ctx, 'bolsonaro', { x: S.W - 64, y: 272, state: 'idle', t: t + 30, facing: -1, scale: .82 });
       S.UI.hint(ctx, 'BAIXO acelera  •  ESC para voltar');
     }
   };
@@ -475,7 +470,7 @@
 
       var cx = -60 + t * 6;
       S.Gfx.drawChar(ctx, this.opts.charId, {
-        x: cx, y: S.H - 40, state: 'run', t: t * 1.6, facing: 1, scale: 1.1 });
+        x: cx, y: 276, state: 'run', t: t * 1.6, facing: 1, scale: 1.1 });
     }
   };
 })();
@@ -718,7 +713,7 @@
       ctx.fillStyle = '#0a0410'; ctx.fillRect(0, 0, S.W, S.H);
       ctx.save();
       ctx.globalAlpha = .3;
-      S.Gfx.drawBackground(ctx, 'fortress', { x: t * .3, y: 40 }, t);
+      S.Gfx.drawBackground(ctx, 'congresso', { x: t * .3, y: 40 }, t);
       ctx.restore();
       var drop = Math.min(120, t * 4);
       S.text(ctx, 'FIM DE JOGO', S.W / 2, 40 + drop, {
@@ -782,11 +777,7 @@
     },
     draw: function (ctx, g) {
       var t = this.t, s = this.sess;
-      S.Gfx.drawBackground(ctx, 'hill', { x: t * 1.6, y: 30 }, t);
-      ctx.fillStyle = '#c98a3c'; ctx.fillRect(0, S.H - 44, S.W, 44);
-      ctx.fillStyle = '#3fc34a'; ctx.fillRect(0, S.H - 44, S.W, 8);
-      ctx.fillStyle = '#7fe47c'; ctx.fillRect(0, S.H - 44, S.W, 3);
-
+      S.Gfx.drawBackground(ctx, 'congresso', { x: t * 1.6, y: 30 }, t);
       ctx.save(); ctx.globalAlpha = .35; ctx.fillStyle = '#05060c';
       ctx.fillRect(0, 0, S.W, S.H); ctx.restore();
 
@@ -814,10 +805,10 @@
         }
       }
 
-      var chars = ['tails', 'sonic', 'knuckles'];
+      var chars = ['lula', 'bolsonaro', 'renan'];
       for (var c = 0; c < 3; c++) {
         S.Gfx.drawChar(ctx, chars[c], {
-          x: S.W / 2 + (c - 1) * 86, y: S.H - 44,
+          x: S.W / 2 + (c - 1) * 86, y: 276,
           state: c === 1 ? 'victory' : 'idle', t: t + c * 24, facing: c === 2 ? -1 : 1,
           scale: 1.1, superForm: this.good && c === 1
         });

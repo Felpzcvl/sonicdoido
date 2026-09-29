@@ -36,7 +36,11 @@
     },
 
     setMusicVol: function (v) { this.musicVol = v; if (this.musicBus) this.musicBus.gain.value = v; },
-    setSfxVol: function (v) { this.sfxVol = v; if (this.sfxBus) this.sfxBus.gain.value = v; },
+    setSfxVol: function (v) {
+      this.sfxVol = v;
+      if (this.sfxBus) this.sfxBus.gain.value = v;
+      for (var k in this._voiceEls || {}) this._voiceEls[k].volume = Math.min(1, v);
+    },
 
     tone: function (o) {
       if (!this.ready) return;
@@ -307,4 +311,48 @@
   };
 
   G.drowning = { bpm: 200, lead: [84, 0, 84, 0, 84, 0, 0, 0], bass: [48, 0, 48, 0, 48, 0, 0, 0] };
+})();
+
+/* ---------------- vozes dos personagens ---------------- */
+(function () {
+  'use strict';
+  var A = window.S.Audio;
+
+  A.voices = {
+    lula: 'audio/lula.mp3',
+    bolsonaro: 'audio/bolsonaro.mp3',
+    renan: 'audio/renan.mp3'
+  };
+  A._voiceEls = {};
+  A._voiceNow = null;
+
+  A.preloadVoices = function () {
+    for (var id in this.voices) {
+      if (this._voiceEls[id]) continue;
+      var el = new Audio(this.voices[id]);
+      el.preload = 'auto';
+      el.volume = this.sfxVol;
+      this._voiceEls[id] = el;
+    }
+  };
+
+  A.stopVoice = function () {
+    if (!this._voiceNow) return;
+    try { this._voiceNow.pause(); this._voiceNow.currentTime = 0; } catch (e) {}
+    this._voiceNow = null;
+  };
+
+  A.voice = function (id) {
+    this.preloadVoices();
+    var el = this._voiceEls[id];
+    if (!el) return;
+    this.stopVoice();
+    el.volume = Math.min(1, this.sfxVol);
+    try {
+      el.currentTime = 0;
+      var p = el.play();
+      if (p && p.catch) p.catch(function () {});
+      this._voiceNow = el;
+    } catch (e) {}
+  };
 })();

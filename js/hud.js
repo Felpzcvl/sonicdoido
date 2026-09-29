@@ -63,7 +63,7 @@
     if (p.invincTimer > 0) ty = timerBar(ctx, ty, 'INVENCIVEL', p.invincTimer / 1200, '#ffd23c');
     if (p.shoesTimer > 0) ty = timerBar(ctx, ty, 'TENIS', p.shoesTimer / 1200, '#e03027');
     if (p.superForm) ty = timerBar(ctx, ty, 'SUPER', Math.min(1, g.rings / 50), '#fff3a8');
-    if (p.charId === 'tails' && p.flying) ty = timerBar(ctx, ty, 'VOO', p.flyTimer / 500, '#9fe2ff');
+    if (p.charId === 'renan' && p.flying) ty = timerBar(ctx, ty, 'IMPULSO', p.flyTimer / 500, '#9fe2ff');
 
     // chefe
     if (g.boss && g.boss.alive && g.boss.phase !== 'intro') HUD.bossBar(ctx, g.boss);
