@@ -1,4 +1,5 @@
 # Sonic — Emerald Rush
+![Uploading image.png…]()
 
 Um jogo de plataforma completo no estilo dos clássicos de 16 bits, feito **100% em
 HTML5 + Canvas + JavaScript puro**. Sem engine, sem build, sem dependências:
