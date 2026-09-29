@@ -702,6 +702,30 @@
       accent: '#42f2c8', water: 'rgba(120,60,220,.4)',
       music: 'zone2'
     },
+    camara: {
+      name: 'CAMARA DOS DEPUTADOS',
+      sky: ['#150f14', '#241a1c', '#33261f'],
+      grass: '#c07a2e', grassDark: '#8a5320', grassLight: '#e6a758',
+      dirt: '#6b4a2a', dirt2: '#573a20', edge: '#2e1f12',
+      accent: '#ffd23c', water: 'rgba(60,150,255,.3)',
+      music: 'zone1'
+    },
+    senado: {
+      name: 'SENADO FEDERAL',
+      sky: ['#06133f', '#0d2a6e', '#1a52b8'],
+      grass: '#2f6fd8', grassDark: '#1b4795', grassLight: '#7fb6ff',
+      dirt: '#1b2a5e', dirt2: '#142146', edge: '#0a1230',
+      accent: '#ffd23c', water: 'rgba(80,140,255,.35)',
+      music: 'zone2'
+    },
+    stf: {
+      name: 'SUPREMO TRIBUNAL FEDERAL',
+      sky: ['#2b1f6b', '#8a3f8a', '#ff8a3c'],
+      grass: '#e6ebf7', grassDark: '#aab3cc', grassLight: '#ffffff',
+      dirt: '#9aa0b5', dirt2: '#7f8699', edge: '#4a4f63',
+      accent: '#ffd23c', water: 'rgba(120,150,230,.4)',
+      music: 'zone3'
+    },
     congresso: {
       name: 'PRACA DOS TRES PODERES',
       sky: ['#1b2a6b', '#7b3f9e', '#ff9a3c'],
@@ -733,6 +757,9 @@
     if (theme === 'hill') Gfx.bgHill(ctx, th, cam, t);
     else if (theme === 'lagoon') Gfx.bgLagoon(ctx, th, cam, t);
     else if (theme === 'congresso') Gfx.bgCongresso(ctx, th, cam, t);
+    else if (theme === 'camara') Gfx.bgCamara(ctx, th, cam, t);
+    else if (theme === 'senado') Gfx.bgSenado(ctx, th, cam, t);
+    else if (theme === 'stf') Gfx.bgSTF(ctx, th, cam, t);
     else Gfx.bgFortress(ctx, th, cam, t);
   };
 
@@ -1490,5 +1517,499 @@
     }
     ctx.fillStyle = '#e9ecf5';
     ctx.fillRect(0, poolY - 4, S.W, 4);
+  };
+})();
+
+/* ---------- cenário: Câmara dos Deputados ---------- */
+(function () {
+  'use strict';
+  var S = window.S, Gfx = S.Gfx;
+
+  /* repete um desenho a cada `period` px com parallax `f` */
+  function band(cam, f, period, cb) {
+    var off = ((cam.x * f) % period + period) % period;
+    var i0 = Math.floor(cam.x * f / period);
+    for (var i = -1; i <= Math.ceil(S.W / period) + 1; i++) cb(i * period - off, i0 + i);
+  }
+  Gfx.bgBand = band;
+
+  function flagBR(ctx, x, y, h, t) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.fillStyle = '#c3cbdb';
+    ctx.fillRect(-1.5, -h, 3, h);
+    ctx.fillStyle = '#e0c14a';
+    S.circle(ctx, 0, -h - 3, 3); ctx.fill();
+    var w = Math.sin(t * .05 + x * .01) * 2;
+    ctx.fillStyle = '#1aa053';
+    S.poly(ctx, [2, -h + 4, 24, -h + 2 + w, 26, -h + 34 + w, 2, -h + 32]); ctx.fill();
+    ctx.fillStyle = '#ffd23c';
+    S.poly(ctx, [6, -h + 18, 14, -h + 8 + w * .6, 22, -h + 18 + w, 14, -h + 28 + w * .4]); ctx.fill();
+    ctx.fillStyle = '#12308f';
+    S.circle(ctx, 14, -h + 18 + w * .5, 4.2); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,.75)';
+    ctx.fillRect(10, -h + 17 + w * .5, 8, 1);
+    ctx.restore();
+  }
+  Gfx.flagBR = flagBR;
+
+  function brasao(ctx, x, y, r) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.fillStyle = '#e0c14a';
+    S.circle(ctx, 0, 0, r); ctx.fill();
+    ctx.fillStyle = '#1aa053';
+    S.circle(ctx, 0, 0, r * .62); ctx.fill();
+    ctx.fillStyle = '#ffe9a8';
+    for (var i = 0; i < 8; i++) {
+      var a = i * Math.PI / 4;
+      S.poly(ctx, [Math.cos(a) * r, Math.sin(a) * r,
+                   Math.cos(a + .35) * r * .55, Math.sin(a + .35) * r * .55,
+                   Math.cos(a - .35) * r * .55, Math.sin(a - .35) * r * .55]);
+      ctx.fill();
+    }
+    ctx.fillStyle = '#12308f';
+    S.circle(ctx, 0, 0, r * .3); ctx.fill();
+    ctx.restore();
+  }
+  Gfx.brasao = brasao;
+
+  Gfx.bgCamara = function (ctx, th, cam, t) {
+    var py = -cam.y * .06;
+
+    // teto e luminárias
+    ctx.fillStyle = '#0e0b10';
+    ctx.fillRect(0, 0, S.W, 46 + py);
+    band(cam, .05, 150, function (x) {
+      ctx.fillStyle = '#f6e6b0';
+      S.roundRect(ctx, x + 30, 14 + py, 64, 7, 3); ctx.fill();
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.fillStyle = 'rgba(255,225,150,.16)';
+      S.ellipse(ctx, x + 62, 24 + py, 60, 22, 0); ctx.fill();
+      ctx.restore();
+    });
+
+    ctx.save();
+    var cg = ctx.createLinearGradient(0, 0, 0, 70 + py);
+    cg.addColorStop(0, 'rgba(8,6,10,.5)');
+    cg.addColorStop(1, 'rgba(8,6,10,0)');
+    ctx.fillStyle = cg;
+    ctx.fillRect(0, 0, S.W, 70 + py);
+    ctx.restore();
+
+    // balcão superior de madeira
+    ctx.fillStyle = '#3a2716';
+    ctx.fillRect(0, 42 + py, S.W, 34);
+    band(cam, .1, 46, function (x) {
+      ctx.fillStyle = '#7a5227';
+      ctx.fillRect(x + 4, 46 + py, 38, 24);
+      ctx.fillStyle = '#9a6a33';
+      ctx.fillRect(x + 4, 46 + py, 38, 4);
+    });
+    ctx.fillStyle = '#241608';
+    ctx.fillRect(0, 74 + py, S.W, 8);
+
+    // parede de lâminas verticais
+    ctx.fillStyle = '#16181f';
+    ctx.fillRect(0, 82 + py, S.W, 150);
+    band(cam, .18, 14, function (x, i) {
+      ctx.fillStyle = (i % 2) ? '#c9ccd8' : '#8d92a3';
+      ctx.fillRect(x, 82 + py, 7, 150);
+      ctx.fillStyle = 'rgba(0,0,0,.35)';
+      ctx.fillRect(x + 7, 82 + py, 7, 150);
+      if (i % 3 === 0) {
+        ctx.fillStyle = '#1aa053';
+        ctx.fillRect(x, 104 + py, 7, 26);
+        ctx.fillStyle = '#ffd23c';
+        ctx.fillRect(x, 130 + py, 7, 22);
+      }
+    });
+
+    // crucifixo, bandeiras, mesa e brasão a cada ciclo
+    band(cam, .25, 620, function (x) {
+      ctx.fillStyle = '#d8d2c4';
+      ctx.fillRect(x + 308, 96 + py, 4, 34);
+      ctx.fillRect(x + 298, 106 + py, 24, 4);
+      ctx.fillStyle = '#e8c9a0';
+      ctx.fillRect(x + 307, 108 + py, 6, 12);
+
+      flagBR(ctx, x + 196, 232 + py, 118, t);
+      flagBR(ctx, x + 424, 232 + py, 118, t);
+
+      ctx.fillStyle = '#5b3a1c';
+      S.roundRect(ctx, x + 232, 196 + py, 156, 36, 3); ctx.fill();
+      ctx.fillStyle = '#7a5227';
+      S.roundRect(ctx, x + 232, 196 + py, 156, 8, 3); ctx.fill();
+      ctx.fillStyle = '#1b1d24';
+      ctx.fillRect(x + 240, 210 + py, 140, 16);
+      brasao(ctx, x + 310, 218 + py, 9);
+      ctx.fillStyle = '#3a3f55';
+      for (var k = 0; k < 5; k++) S.roundRect(ctx, x + 244 + k * 30, 176 + py, 20, 18, 3), ctx.fill();
+    });
+
+    // painéis laterais
+    band(cam, .25, 620, function (x) {
+      panel(ctx, x + 20, 118 + py, 150, 84, 'CAMARA DOS', 'DEPUTADOS');
+      votes(ctx, x + 452, 112 + py, 156, 96, t);
+    });
+
+    // bancadas em primeiro plano
+    ctx.fillStyle = '#1b1208';
+    ctx.fillRect(0, 232 + py, S.W, 60);
+    for (var r = 0; r < 3; r++) {
+      var yy = 236 + py + r * 20;
+      band(cam, .34 + r * .06, 72, function (x) {
+        ctx.fillStyle = r % 2 ? '#8a5c2a' : '#7a5227';
+        S.roundRect(ctx, x, yy, 64, 13, 2); ctx.fill();
+        ctx.fillStyle = '#b4813f';
+        ctx.fillRect(x, yy, 64, 3);
+        ctx.fillStyle = '#2b2f3c';
+        S.roundRect(ctx, x + 8, yy - 9, 18, 10, 2); ctx.fill();
+        S.roundRect(ctx, x + 38, yy - 9, 18, 10, 2); ctx.fill();
+      });
+    }
+  };
+
+  function panel(ctx, x, y, w, h, l1, l2) {
+    ctx.fillStyle = '#0a1330';
+    S.roundRect(ctx, x, y, w, h, 4); ctx.fill();
+    ctx.strokeStyle = '#2a3a70'; ctx.lineWidth = 2;
+    S.roundRect(ctx, x, y, w, h, 4); ctx.stroke();
+    ctx.fillStyle = '#dbe6ff';
+    S.text(ctx, l1, x + w / 2, y + h * .44, { size: 13, align: 'center', color: '#dbe6ff', shadow: false });
+    S.text(ctx, l2, x + w / 2, y + h * .68, { size: 13, align: 'center', color: '#dbe6ff', shadow: false });
+    ctx.fillStyle = '#1aa053'; ctx.fillRect(x + w / 2 - 26, y + h - 14, 18, 4);
+    ctx.fillStyle = '#ffd23c'; ctx.fillRect(x + w / 2 - 6, y + h - 14, 18, 4);
+    ctx.fillStyle = '#2f6fd8'; ctx.fillRect(x + w / 2 + 14, y + h - 14, 18, 4);
+  }
+
+  function votes(ctx, x, y, w, h, t) {
+    ctx.fillStyle = '#04122c';
+    S.roundRect(ctx, x, y, w, h, 4); ctx.fill();
+    ctx.strokeStyle = '#2a3a70'; ctx.lineWidth = 2;
+    S.roundRect(ctx, x, y, w, h, 4); ctx.stroke();
+    for (var c = 0; c < 4; c++) {
+      for (var r = 0; r < 9; r++) {
+        var seed = (c * 17 + r * 7 + Math.floor(t / 90)) % 7;
+        ctx.fillStyle = seed < 3 ? '#1aa053' : (seed < 5 ? '#ffd23c' : '#1e3a7a');
+        ctx.fillRect(x + 8 + c * 36, y + 8 + r * 9, 28, 5);
+      }
+    }
+  }
+})();
+
+/* ---------- cenário: Senado Federal ---------- */
+(function () {
+  'use strict';
+  var S = window.S, Gfx = S.Gfx;
+
+  Gfx.bgSenado = function (ctx, th, cam, t) {
+    var band = Gfx.bgBand, py = -cam.y * .06;
+
+    // cúpula dourada com luminárias
+    ctx.save();
+    var dg = ctx.createLinearGradient(0, 0, 0, 150 + py);
+    dg.addColorStop(0, '#5a4210');
+    dg.addColorStop(1, '#241b08');
+    ctx.fillStyle = dg;
+    ctx.fillRect(0, 0, S.W, 152 + py);
+    ctx.restore();
+
+    for (var row = 0; row < 7; row++) {
+      var ry = 12 + row * 20 + py;
+      var step = 30 + row * 4;
+      band(cam, .03 + row * .004, step, function (x) {
+        var r = 4.4 - row * .35;
+        ctx.save();
+        ctx.globalCompositeOperation = 'lighter';
+        ctx.fillStyle = 'rgba(255,215,120,' + (0.5 - row * .05) + ')';
+        S.circle(ctx, x, ry, r * 2.6); ctx.fill();
+        ctx.restore();
+        ctx.fillStyle = '#ffeaa8';
+        S.circle(ctx, x, ry, r); ctx.fill();
+      });
+    }
+    ctx.fillStyle = 'rgba(10,16,44,.55)';
+    ctx.fillRect(0, 132 + py, S.W, 24);
+    ctx.save();
+    var vg = ctx.createLinearGradient(0, 0, 0, 92 + py);
+    vg.addColorStop(0, 'rgba(6,12,40,.55)');
+    vg.addColorStop(1, 'rgba(6,12,40,0)');
+    ctx.fillStyle = vg;
+    ctx.fillRect(0, 0, S.W, 92 + py);
+    ctx.restore();
+
+    // parede de lâminas claras ao fundo
+    ctx.fillStyle = '#0d1636';
+    ctx.fillRect(0, 150 + py, S.W, 110);
+    band(cam, .16, 16, function (x, i) {
+      ctx.fillStyle = (i % 2) ? '#d5dae8' : '#9aa1b8';
+      ctx.fillRect(x, 150 + py, 8, 108);
+      ctx.fillStyle = 'rgba(0,0,0,.4)';
+      ctx.fillRect(x + 8, 150 + py, 8, 108);
+    });
+    band(cam, .16, 22, function (x) {
+      ctx.fillStyle = 'rgba(255,255,255,.85)';
+      S.circle(ctx, x + 10, 156 + py, 3.2); ctx.fill();
+    });
+
+    // arquibancadas azuis laterais
+    for (var s2 = 0; s2 < 2; s2++) {
+      for (var k = 0; k < 4; k++) {
+        var yy = 176 + k * 18 + py;
+        band(cam, .22 + k * .02, 26, function (x) {
+          ctx.fillStyle = k % 2 ? '#1b4795' : '#23509f';
+          S.roundRect(ctx, x, yy, 20, 12, 2); ctx.fill();
+          ctx.fillStyle = '#2f6fd8';
+          ctx.fillRect(x, yy, 20, 3);
+        });
+      }
+      break;
+    }
+
+    // ciclo central: brasão, mesa, bandeiras, telas
+    band(cam, .25, 660, function (x) {
+      Gfx.brasao(ctx, x + 330, 196 + py, 12);
+
+      Gfx.flagBR(ctx, x + 214, 250 + py, 104, t);
+      Gfx.flagBR(ctx, x + 446, 250 + py, 104, t);
+
+      // mesa diretora com pessoas
+      ctx.fillStyle = '#123066';
+      S.roundRect(ctx, x + 246, 224 + py, 168, 32, 3); ctx.fill();
+      ctx.fillStyle = '#1e4694';
+      S.roundRect(ctx, x + 246, 224 + py, 168, 7, 3); ctx.fill();
+      Gfx.brasao(ctx, x + 330, 242 + py, 7);
+      for (var p = 0; p < 6; p++) {
+        var px2 = x + 258 + p * 28;
+        ctx.fillStyle = ['#2a3150', '#3a4160', '#c8b06a', '#2a3150', '#3a4160', '#a83a4a'][p];
+        S.roundRect(ctx, px2, 208 + py, 17, 18, 4); ctx.fill();
+        ctx.fillStyle = '#e8b183';
+        S.circle(ctx, px2 + 8.5, 204 + py, 5.4); ctx.fill();
+        ctx.fillStyle = ['#2b2118', '#6b5a48', '#3a2a1a', '#1d1a16', '#7a6a58', '#2b2118'][p];
+        ctx.beginPath();
+        ctx.ellipse(px2 + 8.5, 202 + py, 5.6, 4.6, 0, Math.PI, 0);
+        ctx.closePath(); ctx.fill();
+      }
+
+      // telas laterais
+      screen(ctx, x + 30, 168 + py, 168, 74, t);
+      screen(ctx, x + 462, 168 + py, 168, 74, t);
+    });
+
+    // bancada curva em primeiro plano
+    ctx.fillStyle = '#0a1c44';
+    ctx.fillRect(0, 258 + py, S.W, 48);
+    for (var r2 = 0; r2 < 3; r2++) {
+      var y2 = 262 + py + r2 * 18;
+      band(cam, .34 + r2 * .06, 78, function (x) {
+        ctx.fillStyle = '#8a5c2a';
+        S.roundRect(ctx, x, y2, 70, 12, 2); ctx.fill();
+        ctx.fillStyle = '#b4813f';
+        ctx.fillRect(x, y2, 70, 3);
+        ctx.fillStyle = '#1b3a78';
+        S.roundRect(ctx, x + 10, y2 - 10, 20, 11, 3); ctx.fill();
+        S.roundRect(ctx, x + 42, y2 - 10, 20, 11, 3); ctx.fill();
+      });
+    }
+  };
+
+  function screen(ctx, x, y, w, h, t) {
+    ctx.fillStyle = '#0a1a46';
+    S.roundRect(ctx, x, y, w, h, 3); ctx.fill();
+    ctx.strokeStyle = '#3a63b8'; ctx.lineWidth = 2;
+    S.roundRect(ctx, x, y, w, h, 3); ctx.stroke();
+    // retrato
+    ctx.fillStyle = '#123066';
+    ctx.fillRect(x + 6, y + 8, 52, h - 16);
+    ctx.fillStyle = '#e8b183';
+    S.circle(ctx, x + 32, y + 26, 9); ctx.fill();
+    ctx.fillStyle = '#6b6f80';
+    ctx.beginPath(); ctx.ellipse(x + 32, y + 24, 9.4, 7, 0, Math.PI, 0); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#2a3150';
+    S.roundRect(ctx, x + 20, y + 34, 24, 20, 4); ctx.fill();
+    ctx.fillStyle = '#dbe6ff';
+    ctx.fillRect(x + 29, y + 34, 6, 20);
+    // texto
+    S.text(ctx, 'SESSAO', x + 66, y + 28, { size: 13, color: '#ffffff', shadow: false });
+    S.text(ctx, 'DO SENADO FEDERAL', x + 66, y + 44, { size: 9, color: '#bcd0ff', shadow: false });
+    ctx.fillStyle = '#4a7ad8';
+    for (var i = 0; i < 5; i++) ctx.fillRect(x + 66 + i * 18, y + 54, 12, 4);
+  }
+})();
+
+/* ---------- cenário: Supremo Tribunal Federal ao pôr do sol ---------- */
+(function () {
+  'use strict';
+  var S = window.S, Gfx = S.Gfx;
+
+  var CL = [
+    [20, 40, 130, 9, '#ff7a4a'], [200, 26, 96, 8, '#e05f9e'],
+    [330, 58, 150, 10, '#ff9a5c'], [500, 34, 110, 8, '#f2708c'],
+    [90, 88, 170, 11, '#ff8f4d'], [390, 104, 140, 9, '#ffb56b'],
+    [540, 78, 120, 9, '#ff7f5a'], [230, 120, 160, 10, '#ffc27a']
+  ];
+
+  function justica(ctx, x, y, sc) {
+    ctx.save();
+    ctx.translate(x, y); ctx.scale(sc, sc);
+    // pedestal
+    ctx.fillStyle = '#b9bdcc';
+    S.poly(ctx, [-34, 0, 34, 0, 28, -22, -28, -22]); ctx.fill();
+    ctx.fillStyle = '#9ba0b2';
+    ctx.fillRect(-28, -28, 56, 7);
+    // corpo sentado
+    ctx.fillStyle = '#d9dce8';
+    S.poly(ctx, [-26, -28, 26, -28, 20, -76, -18, -76]); ctx.fill();
+    ctx.fillStyle = '#c3c7d6';
+    S.poly(ctx, [-26, -28, -4, -28, -6, -74, -18, -76]); ctx.fill();
+    // braços e espada horizontal
+    ctx.fillStyle = '#e4e7f2';
+    S.roundRect(ctx, -22, -74, 44, 10, 5); ctx.fill();
+    ctx.fillStyle = '#aeb3c4';
+    ctx.fillRect(-40, -70, 80, 4);
+    ctx.fillStyle = '#8f94a6';
+    ctx.fillRect(38, -73, 5, 10);
+    // cabeça e venda
+    ctx.fillStyle = '#e4e7f2';
+    S.ellipse(ctx, 0, -88, 12, 14, 0); ctx.fill();
+    ctx.fillStyle = '#c3c7d6';
+    S.roundRect(ctx, -12, -94, 24, 7, 2); ctx.fill();
+    ctx.fillStyle = '#d9dce8';
+    S.roundRect(ctx, -13, -103, 26, 8, 3); ctx.fill();
+    ctx.restore();
+  }
+  Gfx.justica = justica;
+
+  function pilar(ctx, x, base, h, w) {
+    ctx.fillStyle = '#eef1fa';
+    ctx.beginPath();
+    ctx.moveTo(x - w, base);
+    ctx.quadraticCurveTo(x - w * .1, base - h * .55, x - w * .62, base - h);
+    ctx.lineTo(x + w * .62, base - h);
+    ctx.quadraticCurveTo(x + w * .1, base - h * .55, x + w, base);
+    ctx.closePath(); ctx.fill();
+    ctx.fillStyle = 'rgba(160,168,196,.5)';
+    ctx.beginPath();
+    ctx.moveTo(x - w, base);
+    ctx.quadraticCurveTo(x - w * .1, base - h * .55, x - w * .62, base - h);
+    ctx.lineTo(x - w * .28, base - h);
+    ctx.quadraticCurveTo(x + w * .2, base - h * .5, x - w * .55, base);
+    ctx.closePath(); ctx.fill();
+  }
+
+  Gfx.bgSTF = function (ctx, th, cam, t) {
+    var band = Gfx.bgBand;
+    var px = -(cam.x * .09) % 640;
+    var py = -cam.y * .05;
+    var i;
+
+    // sol
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    var sunX = 88 - (cam.x * .04) % 900;
+    if (sunX < -160) sunX += 900;
+    var g = ctx.createRadialGradient(sunX, 86 + py, 6, sunX, 86 + py, 130);
+    g.addColorStop(0, 'rgba(255,245,180,.95)');
+    g.addColorStop(.35, 'rgba(255,165,70,.42)');
+    g.addColorStop(1, 'rgba(255,110,40,0)');
+    ctx.fillStyle = g; S.circle(ctx, sunX, 86 + py, 130); ctx.fill();
+    ctx.restore();
+    ctx.fillStyle = '#ffeaa0';
+    S.circle(ctx, sunX, 86 + py, 25); ctx.fill();
+    ctx.fillStyle = '#fff6cc';
+    S.circle(ctx, sunX - 6, 80 + py, 9); ctx.fill();
+
+    // nuvens
+    ctx.save();
+    for (i = 0; i < CL.length; i++) {
+      var c = CL[i];
+      var cx = ((c[0] + px * (1 + (i % 3) * .3) + t * .07 * (1 + i % 2)) % 820 + 820) % 820 - 90;
+      ctx.globalAlpha = .8;
+      ctx.fillStyle = c[4];
+      S.roundRect(ctx, cx, c[1] + py, c[2], c[3], c[3] / 2); ctx.fill();
+      S.roundRect(ctx, cx + c[2] * .3, c[1] + py - c[3] * .7, c[2] * .45, c[3], c[3] / 2); ctx.fill();
+    }
+    ctx.restore();
+
+    // arvores no horizonte
+    ctx.fillStyle = '#1d4a2e';
+    band(cam, .3, 30, function (x) {
+      ctx.beginPath();
+      ctx.ellipse(x, 226 + py, 18, 11, 0, Math.PI, 0);
+      ctx.closePath(); ctx.fill();
+    });
+
+    // edifício: laje superior contínua
+    var base = 226 + py, roofY = 128 + py;
+    ctx.fillStyle = '#e9ecf5';
+    ctx.fillRect(0, roofY, S.W, 12);
+    ctx.fillStyle = '#c3c9db';
+    ctx.fillRect(0, roofY + 12, S.W, 5);
+
+    // fachada envidraçada
+    ctx.fillStyle = '#20263f';
+    ctx.fillRect(0, roofY + 17, S.W, base - (roofY + 17));
+    band(cam, .22, 34, function (x, i2) {
+      for (var r = 0; r < 2; r++) {
+        ctx.fillStyle = ((i2 + r) % 4 === 0) ? '#ffd88a' : '#ffb85c';
+        ctx.fillRect(x + 3, roofY + 24 + r * 34, 26, 26);
+        ctx.fillStyle = 'rgba(255,255,255,.18)';
+        ctx.fillRect(x + 3, roofY + 24 + r * 34, 26, 5);
+      }
+      ctx.fillStyle = '#3a4160';
+      ctx.fillRect(x, roofY + 17, 4, base - (roofY + 17));
+    });
+
+    // pilares curvos
+    band(cam, .22, 128, function (x) { pilar(ctx, x + 64, base, 96, 17); });
+
+    // piso e espelho d'água
+    ctx.fillStyle = '#cfd4e2';
+    ctx.fillRect(0, base, S.W, 26);
+    ctx.fillStyle = '#b9bfd2';
+    ctx.fillRect(0, base, S.W, 3);
+
+    var poolY = base + 26;
+    var pg = ctx.createLinearGradient(0, poolY, 0, S.H);
+    pg.addColorStop(0, '#6a4f8e');
+    pg.addColorStop(1, '#2a2350');
+    ctx.fillStyle = pg;
+    ctx.fillRect(0, poolY, S.W, S.H - poolY);
+
+    // reflexo do sol e das luzes
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    for (i = 0; i < 16; i++) {
+      var ry = poolY + 3 + i * 5;
+      var off = Math.sin(t * .045 + i) * 9;
+      ctx.fillStyle = 'rgba(255,190,110,' + (0.2 - i * .009) + ')';
+      ctx.fillRect(52 + off, ry, 78 - i * 2, 2.6);
+    }
+    ctx.restore();
+    band(cam, .22, 34, function (x) {
+      ctx.save();
+      ctx.globalAlpha = .28;
+      ctx.fillStyle = '#ffb85c';
+      ctx.fillRect(x + 3, poolY + 4, 26, 26);
+      ctx.restore();
+    });
+    ctx.fillStyle = 'rgba(255,255,255,.18)';
+    for (i = 0; i < 16; i++) ctx.fillRect((i * 97 + t * .45) % S.W, poolY + 4 + i * 5, 24, 1.3);
+
+    // estátua e mastro a cada ciclo
+    band(cam, .26, 560, function (x) {
+      justica(ctx, x + 430, base + 22, .72);
+      ctx.fillStyle = '#c3cbdb';
+      ctx.fillRect(x + 150, roofY - 64, 3, 64);
+      var w = Math.sin(t * .05) * 3;
+      ctx.fillStyle = '#1aa053';
+      S.poly(ctx, [x + 153, roofY - 64, x + 190, roofY - 60 + w, x + 190, roofY - 42 + w, x + 153, roofY - 46]); ctx.fill();
+      ctx.fillStyle = '#ffd23c';
+      S.poly(ctx, [x + 161, roofY - 55, x + 172, roofY - 51 + w * .6, x + 182, roofY - 55 + w, x + 172, roofY - 59 + w * .4]); ctx.fill();
+      ctx.fillStyle = '#12308f';
+      S.circle(ctx, x + 172, roofY - 55 + w * .4, 3.2); ctx.fill();
+    });
   };
 })();

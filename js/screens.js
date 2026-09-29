@@ -413,7 +413,7 @@
       ['aceleracao, atrito, rampas e rolamento', 12, '#e6ecff'],
       ['', 14, '#ffffff'],
       ['ZONAS', 14, '#9fe2ff'],
-      ['Emerald Hill / Chemical Lagoon / Sky Fortress', 12, '#e6ecff'],
+      ['Camara dos Deputados / Senado Federal / STF', 12, '#e6ecff'],
       ['', 14, '#ffffff'],
       ['AGRADECIMENTOS', 14, '#9fe2ff'],
       ['A voce, por jogar ate aqui!', 12, '#e6ecff'],

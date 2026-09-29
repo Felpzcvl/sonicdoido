@@ -61,10 +61,11 @@ a fase começa.
 
 ## Conteúdo
 
-- **3 zonas × 2 atos = 6 fases**, cada uma com layout próprio
-  - Emerald Hill — colinas, loopings e rampas
-  - Chemical Lagoon — tubos, água e pontes
-  - Sky Fortress — a fortaleza voadora do Eggman
+- **3 zonas × 2 atos = 6 fases**, cada uma com cenário e paleta próprios
+  - **Câmara dos Deputados** — plenário de madeira, painel de votação e bandeiras
+  - **Senado Federal** — cúpula dourada, arquibancadas azuis e a mesa diretora
+  - **Supremo Tribunal Federal** — fachada envidraçada ao pôr do sol, a estátua
+    da Justiça e o espelho d'água
 - **3 chefes** diferentes (bola de demolição, broca e canhão laser)
 - **Fase especial em túnel 3D** para pegar as 6 **Esmeraldas do Caos**
 - **Super forma** ao juntar as 6 esmeraldas e 50 anéis
@@ -77,6 +78,7 @@ a fase começa.
 - Progresso salvo no navegador (fases liberadas, esmeraldas, recordes de tempo e
   pontuação, opções)
 - Menus com cenário da Praça dos Três Poderes ao pôr do sol, desenhado em código
+- Todos os cenários são desenhados por código e rolam com parallax em camadas
 
 ---
 
