@@ -60,9 +60,9 @@
     draw: function (ctx, g) {
       var t = this.t;
       S.Gfx.drawBackground(ctx, 'congresso', { x: this.camx, y: 40 }, t);
-      var chars = ['lula', 'bolsonaro', 'renan'];
-      for (var i = 0; i < 3; i++) {
-        var x = ((t * 3.4 + i * 90) % (S.W + 160)) - 80;
+      var chars = ['lula', 'bolsonaro', 'alexandre', 'renan'];
+      for (var i = 0; i < chars.length; i++) {
+        var x = ((t * 3.4 + i * 78) % (S.W + 180)) - 90;
         S.Gfx.drawChar(ctx, chars[i], {
           x: x, y: 272, state: 'run', t: t * 1.5 + i * 7, facing: 1, scale: .9
         });
@@ -137,7 +137,7 @@
 (function () {
   'use strict';
   var S = window.S, Sc = S.Screens;
-  var IDS = ['lula', 'bolsonaro', 'renan'];
+  var IDS = ['lula', 'bolsonaro', 'alexandre', 'renan'];
 
   function speaker(ctx, x, y, t) {
     ctx.save();
@@ -165,7 +165,7 @@
     update: function (g) {
       this.t++;
       var In = S.Input;
-      if (S.nav(this, 3, true)) {
+      if (S.nav(this, IDS.length, true)) {
         S.Save.data.favChar = IDS[this.sel];
         S.Save.save();
         S.Audio.voice(IDS[this.sel]);
@@ -195,9 +195,11 @@
       S.text(ctx, 'ESCOLHA SEU HEROI', S.W / 2, 44, {
         size: 24, align: 'center', color: '#ffd23c', outline: '#3a1d00', outlineW: 5, shadow: false });
 
-      var cw = 150, ch = 168, gap = 18;
-      var total = cw * 3 + gap * 2;
-      for (var i = 0; i < 3; i++) {
+      var n = IDS.length, gap = 12;
+      var cw = Math.min(150, Math.floor((S.W - 44 - gap * (n - 1)) / n));
+      var ch = 168;
+      var total = cw * n + gap * (n - 1);
+      for (var i = 0; i < n; i++) {
         var x = (S.W - total) / 2 + i * (cw + gap);
         var sel = i === this.sel;
         S.UI.charCard(ctx, IDS[i], x, 66 + (sel ? -8 : 0), cw, ch, sel, t + i * 30);
@@ -375,10 +377,10 @@
       }
       S.UI.panel(ctx, 334, 48, S.W - 358, 272);
       S.text(ctx, 'HABILIDADES', 352, 76, { size: 15, color: '#ffd23c', shadow: false });
-      var chars = ['lula', 'bolsonaro', 'renan'];
-      for (var k = 0; k < 3; k++) {
+      var chars = ['lula', 'bolsonaro', 'alexandre', 'renan'];
+      for (var k = 0; k < chars.length; k++) {
         var c = S.Gfx.CHARS[chars[k]];
-        var yy = 100 + k * 68;
+        var yy = 88 + k * 57;
         S.Gfx.drawChar(ctx, chars[k], { x: 378, y: yy + 34, state: 'idle', t: t + k * 20, facing: 1, scale: .74 });
         S.text(ctx, c.name, 406, yy + 10, { size: 13, color: '#ffffff', shadow: false });
         S.text(ctx, c.ability, 406, yy + 28, { size: 11, color: '#9fe2ff', shadow: false });
@@ -827,11 +829,11 @@
         }
       }
 
-      var chars = ['lula', 'bolsonaro', 'renan'];
-      for (var c = 0; c < 3; c++) {
+      var chars = ['lula', 'bolsonaro', 'alexandre', 'renan'];
+      for (var c = 0; c < chars.length; c++) {
         S.Gfx.drawChar(ctx, chars[c], {
-          x: S.W / 2 + (c - 1) * 86, y: 276,
-          state: c === 1 ? 'victory' : 'idle', t: t + c * 24, facing: c === 2 ? -1 : 1,
+          x: S.W / 2 + (c - 1.5) * 74, y: 276,
+          state: c === 1 ? 'victory' : 'idle', t: t + c * 24, facing: c >= 2 ? -1 : 1,
           scale: 1.1, superForm: this.good && c === 1
         });
       }

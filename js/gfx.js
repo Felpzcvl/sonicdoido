@@ -35,6 +35,21 @@
       ability: 'ARRANCADA (SPIN DASH + DROP DASH)',
       desc: 'O mais rapido. Equilibrado e com o Drop Dash no ar.'
     },
+    alexandre: {
+      name: 'ALEXANDRE DE MORAIS', full: 'ALEXANDRE DE MORAIS',
+      human: true, hairStyle: 'bald', beard: false, smile: false,
+      body: '#1b1b20', body2: '#2c2c34', dark: '#0d0d10',
+      suit: '#1b1b20', suit2: '#2c2c34', suitDark: '#0d0d10',
+      skin: '#f0bd92', skin2: '#d69a6d',
+      hair: '#2a2318', hair2: '#4a4033', eye: '#4a4a52',
+      tie: '#2a4a8a', tie2: '#6f93d6', shirt: '#bcd4f5',
+      shoe: '#101014', shoeB: '#25252d', cuff: '#bcd4f5',
+      pin: false, card: '#2a3a6e',
+      superBody: '#ffe14d', superBody2: '#fff5a8', superDark: '#e0a91a',
+      top: 5.8, jump: 6.3, acc: 0.046875,
+      ability: 'PISAO (APERTE O PULO NO AR)',
+      desc: 'Mergulha no chao, quebra blocos e solta onda de choque.'
+    },
     renan: {
       name: 'RENAN SANTOS', full: 'RENAN SANTOS',
       human: true, hairStyle: 'short', beard: 'stubble', smile: false, noTie: true,
@@ -1082,7 +1097,7 @@
     S.ellipse(ctx, -3.5, 5, 4.6, 3, .5); ctx.fill();
     ctx.fillStyle = c.tie || c.dark;
     S.ellipse(ctx, -5, 7.5, 2.4, 3.4, .5); ctx.fill();
-    ctx.fillStyle = c.hair;
+    ctx.fillStyle = (c.hairStyle === 'bald') ? c.skin2 : c.hair;
     S.circle(ctx, 1, -2, 8); ctx.fill();
     ctx.fillStyle = c.skin;
     S.circle(ctx, 2.6, 0.6, 6.4); ctx.fill();
@@ -1116,7 +1131,21 @@
     S.ellipse(ctx, hx, hy + 7.5, 9, 5.2, 0); ctx.fill();
     ctx.restore();
 
-    if (c.hairStyle === 'wavy') {
+    if (c.hairStyle === 'bald') {
+      ctx.save();
+      ctx.globalAlpha = .5;
+      ctx.fillStyle = '#ffffff';
+      S.ellipse(ctx, hx - 3.5, hy - 7.5, 5.2, 3.2, -.35); ctx.fill();
+      ctx.globalAlpha = .18;
+      S.ellipse(ctx, hx + 4, hy - 9, 3.4, 2, .3); ctx.fill();
+      ctx.restore();
+      ctx.save();
+      ctx.globalAlpha = .16; ctx.fillStyle = c.skin2;
+      ctx.beginPath();
+      ctx.ellipse(hx, hy - 2, 12, 11, 0, Math.PI, Math.PI * 1.25);
+      ctx.closePath(); ctx.fill();
+      ctx.restore();
+    } else if (c.hairStyle === 'wavy') {
       ctx.fillStyle = c.hair;
       ctx.beginPath();
       ctx.ellipse(hx, hy - 3.5, 12.8, 10.8, 0, Math.PI, 0);

@@ -30,7 +30,7 @@
       invulnTimer: 0, invincTimer: 0, shoesTimer: 0,
       shield: null, superForm: false, superTimer: 0,
       hurtTimer: 0, dead: false, deadTimer: 0,
-      flying: false, flyTimer: 0, flyUp: 0,
+      flying: false, flyTimer: 0, flyUp: 0, stomping: false,
       gliding: false, glideSpd: 0, climbing: false, slideTimer: 0,
       dropCharge: 0, dropReady: false,
       inWater: false, air: 1800,
@@ -51,6 +51,7 @@
       if (this.rolling) return true;
       if (!this.grounded && this.jumping && !this.flying) return true;
       if (this.charId === 'lula' && this.gliding) return true;
+      if (this.stomping) return true;
       return false;
     };
 
@@ -145,15 +146,25 @@
   'use strict';
   var S = window.S, L = S.Level, K = S.PHYS;
 
+  function smash(p, w) {
+    var g = S.Game.session;
+    if (!g || !w || w.ch !== 'X') return false;
+    if (!p.isAttacking()) return false;
+    var sp = Math.abs(p.grounded ? p.gsp : p.vx);
+    if (sp < 1.6 && !p.stomping) return false;
+    S.Player.breakAround(g, w.tx * S.TILE + 8, w.ty * S.TILE + 8, 1);
+    return true;
+  }
+
   function wallCollide(p, lv) {
     var ys = [p.y - 10, p.y - p.height() + 8];
     var hit = false;
     for (var i = 0; i < ys.length; i++) {
       var y = ys[i];
       var wr = L.wallAt(lv, p.x + p.rw + 1, y);
-      if (wr) { p.x = wr.tx * S.TILE - p.rw - 1; hit = 1; }
+      if (wr && !smash(p, wr)) { p.x = wr.tx * S.TILE - p.rw - 1; hit = 1; }
       var wl = L.wallAt(lv, p.x - p.rw - 1, y);
-      if (wl) { p.x = (wl.tx + 1) * S.TILE + p.rw + 1; hit = -1; }
+      if (wl && !smash(p, wl)) { p.x = (wl.tx + 1) * S.TILE + p.rw + 1; hit = -1; }
     }
     if (hit) {
       if (p.grounded) {
@@ -208,6 +219,7 @@
   S.Player.groundUpdate = function (p, g, inx, ctrl) {
     var lv = g.level, In = S.Input;
     p.jumping = false; p.flying = false; p.gliding = false; p.climbing = false;
+    p.stomping = false;
     p.dropCharge = 0; p.dropReady = false; p.flyTimer = 0;
 
     if (p.spindash) {
@@ -286,6 +298,7 @@
       p.vy = -p.jumpForce();
       p.vx = p.gsp;
       p.grounded = false; p.jumping = true; p.rolling = false;
+      p.stomping = false;
       p.state = 'jump';
       S.Audio.sfx('jump');
       return;
@@ -344,9 +357,11 @@
     var grv = p.inWater ? 0.0625 : K.GRV;
     if (p.gliding) grv = 0.055;
     if (p.flying && p.flyUp > 0) grv = -0.11;
+    if (p.stomping) { grv = 0.9; p.vx = 0; }
     p.vy += grv;
 
     var maxFall = p.inWater ? 4 : K.MAXFALL;
+    if (p.stomping) maxFall = p.inWater ? 8 : 15;
     if (p.vy > maxFall) p.vy = maxFall;
     if (p.flying && p.vy < -1.5) p.vy = -1.5;
     if (p.gliding && p.vy > 2.2) p.vy = 2.2;
@@ -380,13 +395,14 @@
   };
 
   function land(p, g) {
+    if (p.stomping) { S.Player.stompLand(p, g); }
     if (p.dropReady) {
       p.gsp = (p.superForm ? 12 : 8) * p.face;
       p.rolling = true;
       S.Audio.sfx('release'); g.shake(4);
       S.Particles.burst(p.x, p.y - 6, 10, { color: '#cfe6ff', maxSpeed: 4, life: 20, size: 3 });
     }
-    p.jumping = false; p.flying = false; p.gliding = false;
+    p.jumping = false; p.flying = false; p.gliding = false; p.stomping = false;
     p.dropCharge = 0; p.dropReady = false;
     if (!p.rolling) p.rolling = false;
     if (p.slideT === undefined) p.slideT = 0;
@@ -404,6 +420,19 @@
         if (In.pressed('jump')) { p.flyUp = 26; S.Audio.sfx('fly'); }
         if (p.flyUp > 0) p.flyUp--;
         if (--p.flyTimer <= 0) { p.flying = false; }
+      }
+      return;
+    }
+
+    if (p.charId === 'alexandre') {
+      if (In.pressed('jump') && !p.stomping && p.jumping) {
+        p.stomping = true; p.jumping = false; p.rolling = false;
+        p.vy = 10; p.vx = 0;
+        S.Audio.sfx('spindash');
+      }
+      if (p.stomping && p.animT % 2 === 0) {
+        S.Particles.spawn({ type: 'dust', x: p.x + S.rand(-8, 8), y: p.y - 16,
+          vx: 0, vy: -1.4, g: 0, life: 14, size: 3, color: '#cfe6ff' });
       }
       return;
     }
@@ -557,6 +586,7 @@
     else if (p.climbing) st = 'climb';
     else if (p.gliding) st = 'glide';
     else if (p.flying) st = 'fly';
+    else if (p.stomping) st = 'roll';
     else if (p.rolling) st = 'roll';
     else if (!p.grounded) st = (p.springTimer > 0 ? 'spring' : 'jump');
     else if (p.pushing && sp < 0.6) st = 'push';
@@ -619,4 +649,72 @@
     S.circle(ctx, x, y, 25); ctx.fill();
     ctx.restore();
   }
+})();
+
+/* ---------------- blocos quebráveis e pisão ---------------- */
+(function () {
+  'use strict';
+  var S = window.S, L = S.Level, T = S.TILE;
+
+  S.Player.breakTile = function (g, tx, ty) {
+    var lv = g.level;
+    if (L.tile(lv, tx, ty) !== 'X') return false;
+    L.setTile(lv, tx, ty, '.');
+    g.score += 10;
+    S.Audio.sfx('break');
+    var cx = tx * T + T / 2, cy = ty * T + T / 2;
+    S.Particles.burst(cx, cy, 8, {
+      type: 'shard', color: S.choice(['#c98a3c', '#a86a26', '#e6a758']),
+      maxSpeed: 3.6, life: 26, size: 4
+    });
+    return true;
+  };
+
+  /* quebra os blocos ao redor de um ponto (raio em tiles) */
+  S.Player.breakAround = function (g, x, y, r) {
+    var tx0 = Math.floor(x / T), ty0 = Math.floor(y / T), n = 0;
+    for (var dy = -r; dy <= r; dy++) {
+      for (var dx = -r; dx <= r; dx++) {
+        if (dx * dx + dy * dy > r * r + 1) continue;
+        if (S.Player.breakTile(g, tx0 + dx, ty0 + dy)) n++;
+      }
+    }
+    return n;
+  };
+
+  S.Player.stompLand = function (p, g) {
+    p.stomping = false;
+    S.Audio.sfx('explode');
+    g.shake(14);
+
+    S.Player.breakAround(g, p.x, p.y + 8, 2);
+
+    S.Particles.burst(p.x, p.y - 2, 18, {
+      color: '#e6eefc', maxSpeed: 5, life: 24, size: 4, g: .22
+    });
+    for (var d = -1; d <= 1; d += 2) {
+      for (var i = 0; i < 6; i++) {
+        S.Particles.spawn({
+          type: 'dust', x: p.x + d * (6 + i * 7), y: p.y - 4,
+          vx: d * (1.4 + i * .25), vy: -.5, g: .02,
+          life: 22, size: 3 + i * .4, color: '#ffffff'
+        });
+      }
+    }
+
+    // derruba os badniks por perto
+    for (var k = 0; k < g.entities.length; k++) {
+      var e = g.entities[k];
+      if (!e.alive || !S.Entities.make[e.kind]) continue;
+      if (e.kind === 'ring' || e.kind === 'goal' || e.kind === 'checkpoint' ||
+          e.kind === 'biring' || e.kind === 'dash' || e.kind === 'shot') continue;
+      if (e.kind.indexOf('spring') === 0 || e.kind.indexOf('box') === 0) continue;
+      if (Math.abs(e.x - p.x) > 96 || Math.abs(e.y - p.y) > 72) continue;
+      S.Entities.destroy(e, g, null);
+    }
+    if (g.boss && g.boss.alive && Math.abs(g.boss.x - p.x) < 96 &&
+        Math.abs(g.boss.y - p.y) < 96) {
+      g.boss.damage(g, p);
+    }
+  };
 })();

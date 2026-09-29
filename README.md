@@ -45,12 +45,15 @@ própria fala tocada na tela de seleção.
 
 | Personagem | Habilidade |
 |---|---|
-| **Lula** | **Planar e escalar** paredes; quebra blocos no impacto |
+| **Lula** | **Planar e escalar** paredes |
 | **Bolsonaro** | O mais rápido. Spin Dash + **Drop Dash** (segure o pulo no ar) |
+| **Alexandre de Morais** | **Pisão**: mergulha no chão, quebra blocos e solta onda de choque |
 | **Renan Santos** | **Impulso aéreo**: aperte o pulo de novo no ar e continue apertando |
 
-As vozes ficam em `audio/` (`lula.mp3`, `bolsonaro.mp3`, `renan.mp3`) — troque os
-arquivos mantendo os nomes para mudar as falas.
+Qualquer um quebra os blocos `X` rolando neles em velocidade.
+
+As vozes ficam em `audio/` (`lula.mp3`, `bolsonaro.mp3`, `alexandre.mp3`,
+`renan.mp3`) — troque os arquivos mantendo os nomes para mudar as falas.
 
 Na tela de seleção a fala toca ao entrar e a cada vez que você muda de
 personagem, com a música abaixada automaticamente para não atrapalhar. Aperte

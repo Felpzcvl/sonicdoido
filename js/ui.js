@@ -124,8 +124,10 @@
       state: selected ? (Math.floor(t / 40) % 2 ? 'run' : 'idle') : 'idle',
       t: t, facing: 1, scale: selected ? 1.25 : 1.05
     });
+    var ns = selected ? 17 : 15;
+    while (ns > 8 && S.measure(ctx, c.name, ns) > w - 10) ns--;
     S.text(ctx, c.name, x + w / 2, y + h - 8, {
-      size: selected ? 17 : 15, align: 'center', color: selected ? '#ffd23c' : '#ffffff',
+      size: ns, align: 'center', color: selected ? '#ffd23c' : '#ffffff',
       outline: 'rgba(0,0,0,.7)', outlineW: 4, shadow: false
     });
   };
