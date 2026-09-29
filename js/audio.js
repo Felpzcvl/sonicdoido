@@ -150,14 +150,15 @@
   A.playMusic = function (id, opts) {
     this.init();
     if (!this.ready) return;
-    if (this.currentId === id && this.playing) return;
+    var ts = (opts && opts.tempoScale) || 1;
+    if (this.currentId === id && this.playing && this.tempoScale === ts) return;
     this.currentId = id;
     this.song = this.songs[id];
     if (!this.song) { this.playing = false; return; }
     this.step = 0;
     this.nextTime = this.ctx.currentTime + .06;
     this.playing = true;
-    this.tempoScale = (opts && opts.tempoScale) || 1;
+    this.tempoScale = ts;
   };
 
   A.stopMusic = function () { this.playing = false; this.currentId = null; };
