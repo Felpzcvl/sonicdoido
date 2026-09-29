@@ -1,0 +1,33 @@
+* { margin:0; padding:0; box-sizing:border-box; }
+html,body{
+  width:100%; height:100%; background:#05060c; overflow:hidden;
+  font-family:"Trebuchet MS","Segoe UI",sans-serif;
+  -webkit-user-select:none; user-select:none; touch-action:none;
+}
+#wrap{
+  position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+  background:radial-gradient(circle at 50% 35%, #131c3a 0%, #05060c 75%);
+}
+canvas#game{
+  display:block;
+  image-rendering:pixelated;
+  image-rendering:-moz-crisp-edges;
+  image-rendering:crisp-edges;
+  background:#000;
+  box-shadow:0 0 0 2px #1b2450, 0 18px 60px rgba(0,0,0,.75);
+  border-radius:4px;
+  cursor:default;
+}
+canvas#game.hidecursor{ cursor:none; }
+#loading{
+  position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+  color:#ffd23c; letter-spacing:.3em; font-weight:bold; font-size:14px;
+  background:#05060c; z-index:50;
+}
+#rotate{
+  display:none; position:fixed; inset:0; align-items:center; justify-content:center;
+  color:#fff; background:#05060c; z-index:40; font-size:18px; text-align:center; padding:20px;
+}
+@media (orientation:portrait) and (max-width:900px){
+  #rotate{ display:flex; }
+}
