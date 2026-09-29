@@ -139,6 +139,21 @@
   var S = window.S, Sc = S.Screens;
   var IDS = ['lula', 'bolsonaro', 'renan'];
 
+  function speaker(ctx, x, y, t) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.fillStyle = '#ffd23c';
+    S.poly(ctx, [-9, -3, -4, -3, 1, -8, 1, 8, -4, 3, -9, 3]); ctx.fill();
+    ctx.strokeStyle = '#ffd23c'; ctx.lineWidth = 1.8; ctx.lineCap = 'round';
+    for (var i = 0; i < 3; i++) {
+      ctx.globalAlpha = .35 + .65 * Math.abs(Math.sin(t * .18 - i * .7));
+      ctx.beginPath();
+      ctx.arc(2, 0, 5 + i * 4, -0.8, 0.8);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
   Sc.charselect = {
     enter: function (g, o) {
       this.t = 0;
@@ -147,7 +162,6 @@
       S.Audio.playMusic('title');
       S.Audio.voice(IDS[this.sel]);
     },
-    exit: function () { S.Audio.stopVoice(); },
     update: function (g) {
       this.t++;
       var In = S.Input;
@@ -156,10 +170,12 @@
         S.Save.save();
         S.Audio.voice(IDS[this.sel]);
       }
+      if (In.pressed('action')) { S.Audio.voice(IDS[this.sel]); return; }
       if (In.pressed('confirm')) {
         S.Audio.sfx('start');
         S.Save.data.favChar = IDS[this.sel];
         S.Save.save();
+        if (!S.Audio.voiceIsPlaying()) S.Audio.voice(IDS[this.sel]);
         if (this.opts.pickOnly) { g.go('menu', { sel: 3 }); return; }
         g.go('zoneintro', {
           charId: IDS[this.sel],
@@ -168,6 +184,7 @@
         });
       } else if (In.pressed('back')) {
         S.Audio.sfx('cancel');
+        S.Audio.stopVoice();
         g.go('menu');
       }
     },
@@ -186,12 +203,16 @@
         S.UI.charCard(ctx, IDS[i], x, 66 + (sel ? -8 : 0), cw, ch, sel, t + i * 30);
       }
 
+      if (S.Audio.voiceIsPlaying()) {
+        speaker(ctx, (S.W - total) / 2 + this.sel * (cw + gap) + cw / 2, 50, t);
+      }
+
       var c = S.Gfx.CHARS[IDS[this.sel]];
       S.UI.panel(ctx, 40, 258, S.W - 80, 62);
       S.text(ctx, c.full, S.W / 2, 280, { size: 16, align: 'center', color: '#ffffff', shadow: false });
       S.text(ctx, 'HABILIDADE: ' + c.ability, S.W / 2, 300, { size: 13, align: 'center', color: '#ffd23c', shadow: false });
       S.text(ctx, c.desc, S.W / 2, 316, { size: 11, align: 'center', color: '#b9c6e6', shadow: false });
-      S.UI.hint(ctx, 'ESQ/DIR escolher  •  ENTER confirmar  •  ESC voltar', S.H - 8);
+      S.UI.hint(ctx, 'ESQ/DIR escolher  •  ENTER confirmar  •  X ouvir de novo', S.H - 8);
     }
   };
 
@@ -504,6 +525,7 @@
 
   Sc.play = {
     enter: function (g, o) {
+      S.Audio.stopVoice();
       if (o && o.session) {
         this.sess = o.session;
         S.Game.session = this.sess;

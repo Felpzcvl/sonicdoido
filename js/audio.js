@@ -325,34 +325,58 @@
   };
   A._voiceEls = {};
   A._voiceNow = null;
+  A._ducked = false;
 
   A.preloadVoices = function () {
     for (var id in this.voices) {
       if (this._voiceEls[id]) continue;
       var el = new Audio(this.voices[id]);
       el.preload = 'auto';
-      el.volume = this.sfxVol;
+      el.volume = Math.min(1, this.sfxVol);
+      el.addEventListener('ended', A._onVoiceEnd);
       this._voiceEls[id] = el;
     }
   };
 
+  A._onVoiceEnd = function () { A.unduck(); A._voiceNow = null; };
+
+  /* abaixa a musica enquanto a fala toca */
+  A.duck = function () {
+    if (this._ducked || !this.musicBus) return;
+    this._ducked = true;
+    try { this.musicBus.gain.value = this.musicVol * 0.18; } catch (e) {}
+  };
+  A.unduck = function () {
+    if (!this._ducked || !this.musicBus) return;
+    this._ducked = false;
+    try { this.musicBus.gain.value = this.musicVol; } catch (e) {}
+  };
+
+  A.voiceIsPlaying = function () {
+    return !!(this._voiceNow && !this._voiceNow.paused);
+  };
+
   A.stopVoice = function () {
-    if (!this._voiceNow) return;
-    try { this._voiceNow.pause(); this._voiceNow.currentTime = 0; } catch (e) {}
+    var el = this._voiceNow;
     this._voiceNow = null;
+    this.unduck();
+    if (!el) return;
+    try { el.pause(); el.currentTime = 0; } catch (e) {}
   };
 
   A.voice = function (id) {
+    this.resume();
     this.preloadVoices();
     var el = this._voiceEls[id];
     if (!el) return;
-    this.stopVoice();
+    if (this._voiceNow && this._voiceNow !== el) {
+      try { this._voiceNow.pause(); this._voiceNow.currentTime = 0; } catch (e) {}
+    }
+    this._voiceNow = el;
     el.volume = Math.min(1, this.sfxVol);
-    try {
-      el.currentTime = 0;
-      var p = el.play();
-      if (p && p.catch) p.catch(function () {});
-      this._voiceNow = el;
-    } catch (e) {}
+    this.duck();
+    try { el.currentTime = 0; } catch (e) {}
+    var p = el.play();
+    if (p && p.catch) p.catch(function () { A.unduck(); });
   };
 })();

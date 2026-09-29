@@ -52,6 +52,11 @@ própria fala tocada na tela de seleção.
 As vozes ficam em `audio/` (`lula.mp3`, `bolsonaro.mp3`, `renan.mp3`) — troque os
 arquivos mantendo os nomes para mudar as falas.
 
+Na tela de seleção a fala toca ao entrar e a cada vez que você muda de
+personagem, com a música abaixada automaticamente para não atrapalhar. Aperte
+**X** para ouvir de novo. A fala continua durante o cartão da zona e para quando
+a fase começa.
+
 ---
 
 ## Conteúdo
