@@ -8,7 +8,7 @@
 
   var DEFAULTS = {
     highScore: 50000,
-    unlockedAct: 0,          // índice do ato mais avançado liberado
+    unlockedAct: 99,         // todas as fases liberadas desde o inicio
     emeralds: [false, false, false, false, false, false],
     bestTimes: {},           // actId -> frames
     bestScores: {},          // actId -> score
@@ -34,15 +34,15 @@
     data: clone(DEFAULTS),
 
     load: function () {
+      this.data = clone(DEFAULTS);
       try {
         var raw = localStorage.getItem(KEY);
-        if (raw) {
-          var d = JSON.parse(raw);
-          this.data = this.merge(clone(DEFAULTS), d);
-        }
+        if (raw) this.data = this.merge(clone(DEFAULTS), JSON.parse(raw));
       } catch (e) { this.data = clone(DEFAULTS); }
       // personagem salvo de uma versao antiga
       if (window.S.Gfx && !window.S.Gfx.CHARS[this.data.favChar]) this.data.favChar = DEFAULTS.favChar;
+      // todas as fases ficam liberadas, inclusive em saves antigos
+      this.data.unlockedAct = this.lastAct();
       return this.data;
     },
 
@@ -68,6 +68,24 @@
       this.save();
     },
 
+    /* indice do ultimo ato existente */
+    lastAct: function () {
+      return (window.S.ACTS ? window.S.ACTS.length : 6) - 1;
+    },
+
+    /* primeiro ato ainda nao zerado, para o "continuar" */
+    nextAct: function () {
+      var A = window.S.ACTS || [];
+      for (var i = 0; i < A.length; i++) if (!this.data.cleared[A[i].id]) return i;
+      return Math.max(0, A.length - 1);
+    },
+
+    clearedCount: function () {
+      var A = window.S.ACTS || [], n = 0;
+      for (var i = 0; i < A.length; i++) if (this.data.cleared[A[i].id]) n++;
+      return n;
+    },
+
     emeraldCount: function () {
       var n = 0;
       for (var i = 0; i < this.data.emeralds.length; i++) if (this.data.emeralds[i]) n++;
@@ -77,7 +95,7 @@
     allEmeralds: function () { return this.emeraldCount() >= this.data.emeralds.length; },
 
     unlock: function (actIndex) {
-      if (actIndex > this.data.unlockedAct) { this.data.unlockedAct = actIndex; this.save(); }
+      this.data.unlockedAct = this.lastAct();
     },
 
     recordAct: function (actId, frames, score) {

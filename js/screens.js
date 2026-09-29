@@ -93,7 +93,7 @@
     items: function () {
       return [
         { label: 'NOVO JOGO' },
-        { label: 'CONTINUAR', disabled: S.Save.data.unlockedAct === 0 },
+        { label: 'CONTINUAR', disabled: S.Save.clearedCount() === 0 },
         { label: 'SELECIONAR FASE' },
         { label: 'PERSONAGEM', value: (S.Gfx.CHARS[S.Save.data.favChar] || S.Gfx.CHARS.lula).name },
         { label: 'OPCOES' },
@@ -112,7 +112,7 @@
         S.Audio.sfx('select');
         switch (this.sel) {
           case 0: g.go('charselect', { act: 0, fresh: true }); break;
-          case 1: g.go('charselect', { act: S.Save.data.unlockedAct }); break;
+          case 1: g.go('charselect', { act: S.Save.nextAct() }); break;
           case 2: g.go('levelselect'); break;
           case 3: g.go('charselect', { pickOnly: true }); break;
           case 4: g.go('options'); break;
@@ -229,7 +229,6 @@
       var In = S.Input;
       S.nav(this, S.ACTS.length);
       if (In.pressed('confirm')) {
-        if (this.sel > S.Save.data.unlockedAct) { S.Audio.sfx('cancel'); return; }
         S.Audio.sfx('start');
         g.go('zoneintro', { charId: S.Save.data.favChar, act: this.sel, carry: null });
       } else if (In.pressed('back')) { S.Audio.sfx('cancel'); g.go('menu', { sel: 2 }); }
@@ -246,12 +245,8 @@
       var items = [];
       for (var i = 0; i < S.ACTS.length; i++) {
         var a = S.ACTS[i];
-        var locked = i > S.Save.data.unlockedAct;
         var done = S.Save.data.cleared[a.id];
-        items.push({
-          label: (locked ? '🔒 ' : (done ? '✔ ' : '')) + a.name,
-          disabled: locked
-        });
+        items.push({ label: (done ? '✔ ' : '') + a.name });
       }
       S.UI.menu(ctx, items, this.sel, 200, 86, { gap: 34, size: 14, w: 320, align: 'left' });
 

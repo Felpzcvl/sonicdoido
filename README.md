@@ -78,7 +78,9 @@ a fase começa.
 - **Telas completas**: abertura, título, menu, seleção de personagem, seleção de
   fase, opções, controles, créditos, cartão de zona, pausa, resultados do ato,
   fim de jogo/continue e final do jogo
-- Progresso salvo no navegador (fases liberadas, esmeraldas, recordes de tempo e
+- **Todas as fases liberadas desde o início** — vá direto em SELECIONAR FASE e
+  escolha qualquer ato. CONTINUAR leva ao primeiro ato que você ainda não zerou
+- Progresso salvo no navegador (esmeraldas, atos zerados, recordes de tempo e
   pontuação, opções)
 - Menus com cenário da Praça dos Três Poderes ao pôr do sol, desenhado em código
 - Todos os cenários são desenhados por código e rolam com parallax em camadas
