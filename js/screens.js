@@ -677,7 +677,7 @@
       S.UI.panel(ctx, S.W / 2 - 180, 104, 360, 150);
       var rows = [
         ['BONUS DE TEMPO', S.pad(this.timeB, 5)],
-        ['BONUS DE ANEIS', S.pad(this.ringB, 5)],
+        ['BONUS DE ' + S.pickupLabel(s.charId), S.pad(this.ringB, 5)],
         ['TEMPO', S.fmtTime(s.time)],
         ['PONTOS', S.pad(s.score, 6)]
       ];

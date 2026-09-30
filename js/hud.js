@@ -33,7 +33,7 @@
     value(ctx, S.fmtClock(g.time), 96, 46);
 
     var lowRings = g.rings === 0 && Math.floor(g.frames / 8) % 2 === 0;
-    label(ctx, 'ANEIS', 16, 66, lowRings ? '#ff5c5c' : '#ffd23c');
+    label(ctx, S.pickupLabel(g.charId), 16, 66, lowRings ? '#ff5c5c' : '#ffd23c');
     value(ctx, S.pad(g.rings, 3), 96, 66);
 
     // vidas

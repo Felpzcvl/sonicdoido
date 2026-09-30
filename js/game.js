@@ -216,7 +216,7 @@
 
     g.giveItem = function (kind, x, y) {
       var p = this.player;
-      if (kind === 'rings') { this.addRing(10); S.Particles.popup(x, y, '+10 ANEIS', '#ffd23c'); }
+      if (kind === 'rings') { this.addRing(10); S.Particles.popup(x, y, '+10 ' + S.pickupLabel(this.charId), '#ffd23c'); }
       else if (kind === 'shield') { p.shield = 'shield'; S.Audio.sfx('shield'); S.Particles.popup(x, y, 'ESCUDO', '#4cc3ff'); }
       else if (kind === 'invinc') { p.invincTimer = 1200; S.Audio.sfx('invinc'); S.Particles.popup(x, y, 'INVENCIVEL', '#ffffff'); S.Audio.playMusic('invincible'); }
       else if (kind === 'shoes') { p.shoesTimer = 1200; S.Audio.sfx('shoes'); S.Particles.popup(x, y, 'TENIS VELOZES', '#e03027'); this.restoreMusic(); }

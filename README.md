@@ -53,6 +53,11 @@ própria fala tocada na tela de seleção.
 
 Qualquer um quebra os blocos `X` rolando neles em velocidade.
 
+Cada personagem coleta uma coisa diferente no lugar dos anéis, e o HUD muda
+junto: **Lula** junta picanhas, **Bolsonaro** junta pílulas azuis,
+**Alexandre de Morais** junta maços de dinheiro e **Renan Santos** mantém os
+anéis dourados. Vale para a fase, a fase especial e o monitor de item.
+
 As vozes ficam em `audio/` (`lula.mp3`, `bolsonaro.mp3`, `alexandre.mp3`,
 `renan.mp3`), junto do tema do chefe (`boss-daniel.mp3`) — troque os arquivos mantendo os nomes para mudar as falas.
 

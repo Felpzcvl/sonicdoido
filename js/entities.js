@@ -50,14 +50,14 @@
       if (!p.dead && S.aabb(E.box(this), p.hitbox())) {
         this.alive = false;
         g.addRing(1);
-        S.Particles.burst(this.x, this.y, 4, { color: '#ffe98a', maxSpeed: 2, life: 14, size: 2 });
+        S.Particles.burst(this.x, this.y, 4, { color: S.Gfx.pickupColor(), maxSpeed: 2, life: 14, size: 2 });
       }
     };
     e.draw = function (ctx, cam) {
       var a = 1;
       if (this.scattered && this.ttl < 70) a = (Math.floor(this.ttl / 4) % 2) ? .25 : 1;
       ctx.globalAlpha = a;
-      S.Gfx.ring(ctx, this.x - cam.x, this.y - cam.y, this.t + this.x);
+      S.Gfx.pickup(ctx, this.x - cam.x, this.y - cam.y, this.t + this.x);
       ctx.globalAlpha = 1;
     };
     return e;
@@ -86,7 +86,7 @@
       this.used = true;
       if (g.rings >= 50) { g.enterSpecial(); }
       else {
-        S.Particles.popup(this.x, this.y - 62, 'PRECISA DE 50 ANEIS', '#ffd23c');
+        S.Particles.popup(this.x, this.y - 62, 'PRECISA DE 50 ' + S.pickupLabel(), '#ffd23c');
         S.Audio.sfx('cancel'); this.cool = 70;
       }
     };

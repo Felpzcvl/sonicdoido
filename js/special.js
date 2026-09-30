@@ -99,7 +99,7 @@
           o.dead = true;
           if (o.kind === 'ring') {
             st.rings++; S.Audio.sfx('ring');
-            S.Particles.burst(S.W / 2, S.H - 96, 5, { color: '#ffd23c', maxSpeed: 3, life: 16, size: 3 });
+            S.Particles.burst(S.W / 2, S.H - 96, 5, { color: S.Gfx.pickupColor(st.charId), maxSpeed: 3, life: 16, size: 3 });
           } else if (o.kind === 'bomb') {
             st.rings = Math.max(0, st.rings - 8);
             st.flash = 22; st.speed = Math.max(5, st.speed - 2.2);
@@ -172,7 +172,7 @@
       ctx.save();
       ctx.globalAlpha = Math.min(1, pp.s * 3.2);
       if (ob.kind === 'ring') {
-        S.Gfx.ring(ctx, pp.x, pp.y, st.t * 2 + ob.z, pp.s * 1.5);
+        S.Gfx.pickup(ctx, pp.x, pp.y, st.t * 2 + ob.z, pp.s * 1.5, st.charId);
       } else if (ob.kind === 'bomb') {
         ctx.translate(pp.x, pp.y); ctx.scale(pp.s * 1.6, pp.s * 1.6);
         ctx.fillStyle = '#24262e'; S.circle(ctx, 0, 0, 9); ctx.fill();
@@ -212,7 +212,7 @@
       var n = 3 - Math.floor(st.phaseT / 40);
       S.UI.panel(ctx, S.W / 2 - 200, 100, 400, 140);
       S.text(ctx, 'FASE ESPECIAL', S.W / 2, 142, { size: 26, align: 'center', color: '#ffd23c', outline: '#3a1d00', outlineW: 5, shadow: false });
-      S.text(ctx, 'PEGUE ' + st.target + ' ANEIS EM 60s', S.W / 2, 174, { size: 16, align: 'center', color: '#ffffff', shadow: false });
+      S.text(ctx, 'PEGUE ' + st.target + ' ' + S.pickupLabel(st.charId) + ' EM 60s', S.W / 2, 174, { size: 16, align: 'center', color: '#ffffff', shadow: false });
       S.text(ctx, n > 0 ? String(n) : 'JA!', S.W / 2, 218, { size: 30, align: 'center', color: '#9fe2ff', outline: '#0a1b3a', outlineW: 5, shadow: false });
     } else if (st.phase === 'win') {
       S.UI.panel(ctx, S.W / 2 - 200, 84, 400, 176);
@@ -222,7 +222,7 @@
     } else if (st.phase === 'lose') {
       S.UI.panel(ctx, S.W / 2 - 200, 110, 400, 130);
       S.text(ctx, 'NAO DEU DESSA VEZ', S.W / 2, 158, { size: 22, align: 'center', color: '#ff8a8a', outline: '#3a0000', outlineW: 5, shadow: false });
-      S.text(ctx, 'Voce pegou ' + st.rings + ' de ' + st.target + ' aneis', S.W / 2, 190, { size: 14, align: 'center', color: '#ffffff', shadow: false });
+      S.text(ctx, 'Voce pegou ' + st.rings + ' de ' + st.target, S.W / 2, 190, { size: 14, align: 'center', color: '#ffffff', shadow: false });
       S.text(ctx, 'Pressione para continuar', S.W / 2, 222, { size: 12, align: 'center', color: '#cfd8ff', shadow: false });
     }
   };
@@ -232,7 +232,7 @@
     ctx.globalAlpha = .32; ctx.fillStyle = '#060a18';
     S.roundRect(ctx, S.W / 2 - 130, 8, 260, 36, 8); ctx.fill();
     ctx.restore();
-    S.text(ctx, 'ANEIS ' + st.rings + ' / ' + st.target, S.W / 2, 25, {
+    S.text(ctx, S.pickupLabel(st.charId) + ' ' + st.rings + ' / ' + st.target, S.W / 2, 25, {
       size: 15, align: 'center', color: '#ffd23c', outline: 'rgba(0,0,0,.8)', outlineW: 4, shadow: false });
     S.UI.bar(ctx, S.W / 2 - 112, 32, 224, st.rings / st.target, '#42f2c8');
     var left = Math.max(0, 62 - Math.floor(st.t / 60));

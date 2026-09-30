@@ -14,7 +14,7 @@
       suit: '#252a3a', suit2: '#39405a', suitDark: '#14171f',
       skin: '#e8ac7e', skin2: '#cf8f63',
       hair: '#e9e9e9', hair2: '#bfbfbf', eye: '#4a3526',
-      tie: '#cf2b25', tie2: '#8d1d17', shirt: '#ffffff', card: '#c0392b',
+      tie: '#cf2b25', tie2: '#8d1d17', shirt: '#ffffff', card: '#c0392b', pickup: 'picanha',
       shoe: '#15181f', shoeB: '#2a2f3c', cuff: '#ffffff', pin: false,
       superBody: '#ffe14d', superBody2: '#fff5a8', superDark: '#e0a91a',
       top: 5.9, jump: 6.2, acc: 0.046875,
@@ -28,7 +28,7 @@
       suit: '#22304f', suit2: '#33456e', suitDark: '#131b2e',
       skin: '#f0b083', skin2: '#d89468',
       hair: '#4a3626', hair2: '#8d8378', eye: '#3c6ea8',
-      tie: '#1aa053', tie2: '#ffd23c', shirt: '#ffffff', card: '#1e7a3c',
+      tie: '#1aa053', tie2: '#ffd23c', shirt: '#ffffff', card: '#1e7a3c', pickup: 'comprimido',
       shoe: '#15181f', shoeB: '#2a2f3c', cuff: '#ffffff', pin: true,
       superBody: '#ffe14d', superBody2: '#fff5a8', superDark: '#e0a91a',
       top: 6.2, jump: 6.6, acc: 0.046875,
@@ -44,7 +44,7 @@
       hair: '#2a2318', hair2: '#4a4033', eye: '#4a4a52',
       tie: '#2a4a8a', tie2: '#6f93d6', shirt: '#bcd4f5',
       shoe: '#101014', shoeB: '#25252d', cuff: '#bcd4f5',
-      pin: false, card: '#2a3a6e',
+      pin: false, card: '#2a3a6e', pickup: 'dinheiro',
       superBody: '#ffe14d', superBody2: '#fff5a8', superDark: '#e0a91a',
       top: 5.8, jump: 6.3, acc: 0.046875,
       ability: 'PISAO (APERTE O PULO NO AR)',
@@ -409,7 +409,7 @@
   };
 
   var BOX_ICONS = {
-    rings: function (ctx) { Gfx.ring(ctx, 0, 0, 0, .85); },
+    rings: function (ctx, t) { Gfx.pickup(ctx, 0, 0, t || 0, .85); },
     shield: function (ctx) {
       ctx.fillStyle = '#39a7ff'; S.circle(ctx, 0, 0, 7.5); ctx.fill();
       ctx.fillStyle = 'rgba(255,255,255,.65)'; S.circle(ctx, -2, -2, 3); ctx.fill();
@@ -2202,5 +2202,173 @@
     ctx.fillRect(0, base + 30, S.W, S.H);
     ctx.fillStyle = '#7d8394';
     ctx.fillRect(0, base + 30, S.W, 3);
+  };
+})();
+
+/* ---------- coletáveis por personagem ---------- */
+(function () {
+  'use strict';
+  var S = window.S, Gfx = S.Gfx;
+
+  /* picanha: peça de carne com capa de gordura */
+  Gfx.picanha = function (ctx, x, y, t, scale) {
+    scale = scale || 1;
+    var w = .45 + .55 * Math.abs(Math.cos(t * .11));
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(scale * w, scale);
+    ctx.rotate(Math.sin(t * .05) * .1);
+
+    // contorno
+    ctx.fillStyle = '#4a150c';
+    S.roundRect(ctx, -10, -8, 20, 16, 7); ctx.fill();
+    // carne
+    ctx.fillStyle = '#a32a22';
+    S.roundRect(ctx, -9, -7, 18, 14, 6); ctx.fill();
+    ctx.fillStyle = '#c94034';
+    S.roundRect(ctx, -7.5, -5.5, 15, 11, 5); ctx.fill();
+    // marmoreio
+    ctx.fillStyle = 'rgba(255,190,175,.55)';
+    S.ellipse(ctx, -2.5, -1, 3.2, 1.1, -.5); ctx.fill();
+    S.ellipse(ctx, 2.5, 2, 2.6, .9, .4); ctx.fill();
+    // capa de gordura
+    ctx.fillStyle = '#f2e3b8';
+    ctx.beginPath();
+    ctx.ellipse(0, -5.4, 9, 5.2, 0, Math.PI, 0);
+    ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#fff6da';
+    ctx.beginPath();
+    ctx.ellipse(-1, -6.2, 6.4, 3, 0, Math.PI, 0);
+    ctx.closePath(); ctx.fill();
+    // crosta dourada
+    ctx.fillStyle = '#c98a3c';
+    S.roundRect(ctx, -9, -8.4, 18, 2.6, 1.3); ctx.fill();
+    // sal
+    ctx.fillStyle = '#ffffff';
+    S.circle(ctx, -4, -7.4, .8); ctx.fill();
+    S.circle(ctx, 1.6, -8, .7); ctx.fill();
+    S.circle(ctx, 5.4, -7, .6); ctx.fill();
+    ctx.restore();
+  };
+
+  /* maço de notas de 100 reais */
+  Gfx.dinheiro = function (ctx, x, y, t, scale) {
+    scale = scale || 1;
+    var w = .45 + .55 * Math.abs(Math.cos(t * .11));
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(scale * w, scale);
+    ctx.rotate(-.12 + Math.sin(t * .05) * .08);
+
+    // notas de tras
+    ctx.fillStyle = '#1f7e74';
+    S.roundRect(ctx, -9.5, -4.5, 19, 10, 1.6); ctx.fill();
+    ctx.fillStyle = '#2b9f92';
+    S.roundRect(ctx, -9, -5.6, 18.5, 10, 1.6); ctx.fill();
+    // nota da frente
+    ctx.fillStyle = '#137a6e';
+    S.roundRect(ctx, -9.5, -7, 19, 10.5, 1.8); ctx.fill();
+    ctx.fillStyle = '#3fc0ad';
+    S.roundRect(ctx, -8.8, -6.4, 17.6, 9.3, 1.5); ctx.fill();
+    ctx.fillStyle = '#9fe6d8';
+    S.roundRect(ctx, -8, -5.7, 16, 7.9, 1.2); ctx.fill();
+    // efigie
+    ctx.fillStyle = '#4fb8a6';
+    S.ellipse(ctx, -4.2, -1.7, 2.6, 3.4, 0); ctx.fill();
+    // valor
+    ctx.fillStyle = '#0d5a52';
+    S.roundRect(ctx, 1.6, -4.6, 5.6, 2.2, .8); ctx.fill();
+    ctx.fillStyle = 'rgba(13,90,82,.55)';
+    ctx.fillRect(1.6, -.6, 5.6, .9);
+    ctx.fillRect(1.6, 1, 4.2, .9);
+    // cinta
+    ctx.fillStyle = '#e8c34a';
+    S.roundRect(ctx, -2.4, -7.4, 4.6, 11.4, .8); ctx.fill();
+    ctx.fillStyle = '#fbe490';
+    ctx.fillRect(-2.4, -7.4, 1.6, 11.4);
+    ctx.restore();
+  };
+
+  Gfx.pickupColor = function (charId) {
+    var k = Gfx.pickupKind(charId);
+    return k === 'picanha' ? '#e8776a' :
+           (k === 'dinheiro' ? '#7fe0cf' :
+           (k === 'comprimido' ? '#8fc4ff' : '#ffe98a'));
+  };
+
+  Gfx.pickupKind = function (charId) {
+    var id = charId || (S.Game && S.Game.session && S.Game.session.charId) ||
+             (S.Save && S.Save.data && S.Save.data.favChar);
+    var c = Gfx.CHARS[id];
+    return (c && c.pickup) || 'ring';
+  };
+
+  Gfx.pickup = function (ctx, x, y, t, scale, charId) {
+    var k = Gfx.pickupKind(charId);
+    if (k === 'picanha') Gfx.picanha(ctx, x, y, t, scale);
+    else if (k === 'dinheiro') Gfx.dinheiro(ctx, x, y, t, scale);
+    else if (k === 'comprimido') Gfx.comprimido(ctx, x, y, t, scale);
+    else Gfx.ring(ctx, x, y, t, scale);
+  };
+
+  /* nome usado no HUD e nos textos */
+  S.pickupLabel = function (charId) {
+    var k = Gfx.pickupKind(charId);
+    return k === 'picanha' ? 'PICANHAS' :
+           (k === 'dinheiro' ? 'DINHEIRO' :
+           (k === 'comprimido' ? 'PILULAS' : 'ANEIS'));
+  };
+})();
+
+/* ---------- coletável do Bolsonaro: comprimido azul ---------- */
+(function () {
+  'use strict';
+  var S = window.S, Gfx = S.Gfx;
+
+  function losango(ctx, w, h) {
+    ctx.beginPath();
+    ctx.moveTo(-w, 0);
+    ctx.quadraticCurveTo(-w * .7, -h * .72, 0, -h);
+    ctx.quadraticCurveTo(w * .7, -h * .72, w, 0);
+    ctx.quadraticCurveTo(w * .7, h * .72, 0, h);
+    ctx.quadraticCurveTo(-w * .7, h * .72, -w, 0);
+    ctx.closePath();
+  }
+
+  Gfx.comprimido = function (ctx, x, y, t, scale) {
+    scale = scale || 1;
+    var w = .45 + .55 * Math.abs(Math.cos(t * .11));
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(scale * w, scale);
+    ctx.rotate(Math.sin(t * .05) * .08);
+
+    // espessura
+    ctx.fillStyle = '#0d3f86';
+    losango(ctx, 10, 7); ctx.fill();
+    ctx.save(); ctx.translate(0, 2.2);
+    ctx.fillStyle = '#1257ad';
+    losango(ctx, 9.6, 6.6); ctx.fill();
+    ctx.restore();
+
+    // face de cima
+    ctx.fillStyle = '#1e6fd0';
+    losango(ctx, 9.6, 6.6); ctx.fill();
+    ctx.save();
+    ctx.translate(0, -.6);
+    ctx.fillStyle = '#3f97ea';
+    losango(ctx, 8.4, 5.6); ctx.fill();
+    ctx.restore();
+
+    // sulco central
+    ctx.fillStyle = 'rgba(12,60,120,.35)';
+    ctx.fillRect(-6.4, -.7, 12.8, 1.4);
+
+    // brilho
+    ctx.fillStyle = 'rgba(255,255,255,.75)';
+    S.ellipse(ctx, -3.4, -3.2, 3.4, 1.3, -.42); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,.35)';
+    S.ellipse(ctx, 3.6, -2.4, 1.7, .8, .3); ctx.fill();
+    ctx.restore();
   };
 })();
