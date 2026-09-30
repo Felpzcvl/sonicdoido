@@ -59,27 +59,32 @@
     },
     draw: function (ctx, g) {
       var t = this.t;
-      S.Gfx.drawBackground(ctx, 'congresso', { x: this.camx, y: 40 }, t);
-      var chars = ['lula', 'bolsonaro', 'alexandre', 'renan'];
-      for (var i = 0; i < chars.length; i++) {
-        var x = ((t * 3.4 + i * 78) % (S.W + 180)) - 90;
-        S.Gfx.drawChar(ctx, chars[i], {
-          x: x, y: 272, state: 'run', t: t * 1.5 + i * 7, facing: 1, scale: .9
-        });
-      }
 
-      S.UI.vignette(ctx, .4);
-      S.UI.title(ctx, t, 116, 1);
-      S.shine(ctx, S.W / 2 - 180, 70, 360, 70, t * 3);
+      if (S.Gfx.capaPronta()) {
+        S.Gfx.drawCapa(ctx, 34);
+      } else {
+        // enquanto a arte nao carrega, o titulo desenhado em codigo
+        S.Gfx.drawBackground(ctx, 'congresso', { x: this.camx, y: 40 }, t);
+        var chars = ['lula', 'bolsonaro', 'alexandre', 'renan'];
+        for (var i = 0; i < chars.length; i++) {
+          S.Gfx.drawChar(ctx, chars[i], {
+            x: ((t * 3.4 + i * 78) % (S.W + 180)) - 90, y: 272,
+            state: 'run', t: t * 1.5 + i * 7, facing: 1, scale: .9
+          });
+        }
+        S.UI.vignette(ctx, .4);
+        S.UI.title(ctx, t, 116, 1);
+        S.shine(ctx, S.W / 2 - 180, 70, 360, 70, t * 3);
+      }
 
       if (Math.floor(t / 26) % 2 === 0) {
-        S.text(ctx, 'PRESSIONE ENTER OU ESPACO', S.W / 2, 228, {
-          size: 17, align: 'center', color: '#ffffff', outline: 'rgba(0,0,0,.75)', outlineW: 4, shadow: false });
+        S.text(ctx, 'PRESSIONE ENTER OU ESPACO', S.W / 2, 312, {
+          size: 17, align: 'center', color: '#ffffff', outline: 'rgba(0,0,0,.8)', outlineW: 5, shadow: false });
       }
-      S.text(ctx, 'RECORDE  ' + S.pad(S.Save.data.highScore, 6), S.W / 2, 262, {
-        size: 13, align: 'center', color: '#9fe2ff', shadow: false });
-      S.text(ctx, 'v' + S.VERSION + '  •  um jogo de plataforma feito em HTML5', S.W / 2, S.H - 14, {
-        size: 11, align: 'center', color: 'rgba(230,240,255,.6)', shadow: false });
+      S.text(ctx, 'RECORDE  ' + S.pad(S.Save.data.highScore, 6), S.W / 2, 338, {
+        size: 13, align: 'center', color: '#9fe2ff', outline: 'rgba(0,0,0,.7)', outlineW: 4, shadow: false });
+      S.text(ctx, 'v' + S.VERSION, S.W - 10, S.H - 8, {
+        size: 10, align: 'right', color: 'rgba(230,240,255,.55)', shadow: false });
     }
   };
 

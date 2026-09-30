@@ -2372,3 +2372,52 @@
     ctx.restore();
   };
 })();
+
+/* ---------- arte de capa ---------- */
+(function () {
+  'use strict';
+  var S = window.S, Gfx = S.Gfx;
+
+  Gfx.CAPA_SRC = 'assets/capa.webp';
+  Gfx.capa = null;
+
+  Gfx.loadCapa = function () {
+    if (Gfx.capa) return Gfx.capa;
+    var img = new Image();
+    img.src = Gfx.CAPA_SRC;
+    Gfx.capa = img;
+    return img;
+  };
+
+  Gfx.capaPronta = function () {
+    var i = Gfx.capa;
+    return !!(i && i.complete && i.naturalWidth > 0);
+  };
+
+  /* fundo preenchendo a tela + a arte inteira por cima */
+  Gfx.drawCapa = function (ctx, topo) {
+    var img = Gfx.capa;
+    if (!Gfx.capaPronta()) return 0;
+    var iw = img.naturalWidth, ih = img.naturalHeight;
+
+    ctx.save();
+    var sc = Math.max(S.W / iw, S.H / ih);
+    var w = iw * sc, h = ih * sc;
+    ctx.globalAlpha = .5;
+    ctx.drawImage(img, (S.W - w) / 2, (S.H - h) / 2, w, h);
+    ctx.restore();
+    ctx.save();
+    ctx.fillStyle = 'rgba(6,10,26,.5)';
+    ctx.fillRect(0, 0, S.W, S.H);
+    ctx.restore();
+
+    var bh = Math.round(ih * (S.W / iw));
+    ctx.drawImage(img, 0, topo, S.W, bh);
+    ctx.save();
+    ctx.strokeStyle = 'rgba(0,0,0,.55)';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(0, topo, S.W, bh);
+    ctx.restore();
+    return bh;
+  };
+})();
