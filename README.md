@@ -1,4 +1,4 @@
-# Sonic — Emerald Rush
+# BRASIL — ELEIÇAO RUSH
 ![BRASIL ELEIÇÃO RUSH](assets/capa.webp)
 
 Um jogo de plataforma completo no estilo dos clássicos de 16 bits, feito **100% em
