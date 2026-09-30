@@ -437,7 +437,7 @@
       return;
     }
 
-    // 2) planar / escalar
+    // 2) planar (a parede ja foi tratada antes, em S.Player.update)
     if (In.pressed('action') && !p.gliding && !p.climbing && !p.grounded && p.superLock <= 0) {
       p.gliding = true; p.jumping = false; p.flying = false;
       p.vy = 0; p.glideSpd = 4.2;
@@ -574,6 +574,13 @@
 
     var ctrl = p.controlEnabled && !p.goalLock && p.hurtTimer <= 0;
     var inx = (ctrl && p.ctrlLock <= 0) ? In.axisX() : 0;
+
+    // X agarra a parede, esteja no chao ou no ar
+    if (ctrl && p.superLock <= 0 && !p.climbing && !p.gliding && !p.stomping &&
+        In.pressed('action')) {
+      var alvo = S.Player.paredePerto(p, g.level);
+      if (alvo) { S.Player.agarrarParede(p, alvo); S.Player.animate(p); return; }
+    }
 
     if (p.grounded) S.Player.groundUpdate(p, g, inx, ctrl);
     else S.Player.airUpdate(p, g, inx, ctrl);
@@ -732,5 +739,37 @@
         Math.abs(g.boss.y - p.y) < 96) {
       g.boss.damage(g, p);
     }
+  };
+})();
+
+/* ---------------- agarrar parede ---------------- */
+(function () {
+  'use strict';
+  var S = window.S, L = S.Level, T = S.TILE;
+
+  /* Procura parede logo ao lado, com folga, nas duas alturas do corpo.
+     Devolve {lado, tx} ou null. */
+  S.Player.paredePerto = function (p, lv) {
+    var ys = [p.y - 10, p.y - 26], d, r, w;
+    for (d = 0; d < ys.length; d++) {
+      for (r = p.rw + 1; r <= p.rw + 16; r += 2) {
+        w = L.wallAt(lv, p.x + r, ys[d]);
+        if (w) return { lado: 1, tx: w.tx };
+        w = L.wallAt(lv, p.x - r, ys[d]);
+        if (w) return { lado: -1, tx: w.tx };
+      }
+    }
+    return null;
+  };
+
+  /* Gruda na parede e comeca a escalar. */
+  S.Player.agarrarParede = function (p, alvo) {
+    p.climbing = true;
+    p.gliding = false; p.jumping = false; p.flying = false; p.stomping = false;
+    p.grounded = false; p.rolling = false;
+    p.face = alvo.lado;
+    p.vx = 0; p.vy = 0; p.gsp = 0;
+    p.x = alvo.lado > 0 ? alvo.tx * T - p.rw - 1 : (alvo.tx + 1) * T + p.rw + 1;
+    S.Audio.sfx('glide');
   };
 })();

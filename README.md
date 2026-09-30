@@ -61,7 +61,8 @@ eles é a aparência e o que cada um coleta.
 | **Voar** | Aperte o pulo de novo no ar (e vá apertando para subir) |
 | **Drop Dash** | Segure o pulo depois de saltar e caia rolando em alta velocidade |
 | **Pisão** | Seta para baixo + pulo no ar: mergulha, quebra blocos e solta onda de choque |
-| **Planar / Escalar** | X no ar; ao encostar numa parede, sobe por ela |
+| **Escalar parede** | X encostado numa parede, no chão ou no ar; depois setas para subir e pulo para saltar dela |
+| **Planar** | X no ar, longe de parede |
 | **Spin Dash** | Baixo + pulo no chão, soltando o baixo para disparar |
 
 | Personagem | Coleta |

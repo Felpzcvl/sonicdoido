@@ -357,7 +357,7 @@
         ['BAIXO + PULO', 'Spin Dash (carregar)'],
         ['ESPACO / Z', 'Pular'],
         ['PULO NO AR', 'Voar (2o toque)'],
-        ['X / SHIFT', 'Planar no ar e virar Super'],
+        ['X / SHIFT', 'Escalar parede, planar, Super'],
         ['ENTER / P', 'Pausar'],
         ['ESC', 'Voltar / cancelar']
       ];
@@ -373,7 +373,8 @@
         ['PULO NO AR (2o toque)', 'VOAR'],
         ['SEGURAR O PULO', 'DROP DASH'],
         ['BAIXO + PULO NO AR', 'PISAO'],
-        ['X NO AR', 'PLANAR / ESCALAR'],
+        ['X PERTO DE PAREDE', 'ESCALAR'],
+        ['X NO AR', 'PLANAR'],
         ['BAIXO + PULO NO CHAO', 'SPIN DASH']
       ];
       for (var h = 0; h < hab.length; h++) {
