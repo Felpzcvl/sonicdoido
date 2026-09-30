@@ -6,53 +6,110 @@
   var S = window.S;
   var Gfx = S.Gfx;
 
+  /* Daniel Vocaro pilotando a nave do Banco Master */
   Gfx.eggmobile = function (ctx, x, y, t, hurt, face) {
     ctx.save();
     ctx.translate(x, y);
     ctx.scale(face < 0 ? -1 : 1, 1);
     if (hurt) ctx.globalAlpha = (Math.floor(t / 2) % 2) ? .35 : 1;
 
-    // chamas do propulsor
+    // propulsor
     ctx.save();
     ctx.globalCompositeOperation = 'lighter';
     var fl = 8 + Math.sin(t * .6) * 4;
     var g1 = ctx.createRadialGradient(0, 22, 2, 0, 22, fl + 8);
-    g1.addColorStop(0, 'rgba(255,230,120,.9)');
-    g1.addColorStop(1, 'rgba(255,120,20,0)');
+    g1.addColorStop(0, 'rgba(160,215,255,.95)');
+    g1.addColorStop(1, 'rgba(40,120,255,0)');
     ctx.fillStyle = g1; S.circle(ctx, 0, 22, fl + 8); ctx.fill();
     ctx.restore();
 
     // casco
     ctx.fillStyle = '#c9ccd8';
     S.ellipse(ctx, 0, 4, 40, 22, 0); ctx.fill();
-    ctx.fillStyle = '#8f95a8';
+    ctx.fillStyle = '#7f879c';
     S.ellipse(ctx, 0, 12, 40, 12, 0); ctx.fill();
-    ctx.fillStyle = '#d6342b';
-    S.roundRect(ctx, -42, -2, 84, 8, 4); ctx.fill();
+    ctx.fillStyle = '#13306e';
+    S.roundRect(ctx, -42, -2, 84, 9, 4); ctx.fill();
+    ctx.fillStyle = '#2f6fd8';
+    S.roundRect(ctx, -42, -2, 84, 4, 2); ctx.fill();
 
-    // cúpula
-    ctx.fillStyle = 'rgba(190,230,255,.45)';
-    ctx.beginPath(); ctx.arc(0, -2, 26, Math.PI, 0); ctx.closePath(); ctx.fill();
-    ctx.strokeStyle = '#8f95a8'; ctx.lineWidth = 2; ctx.stroke();
-
-    // Eggman
+    // logo do banco no casco (nao espelha junto com a nave)
     ctx.save();
-    ctx.translate(2, -4);
-    ctx.fillStyle = '#d6342b';
-    S.ellipse(ctx, 0, 4, 17, 12, 0); ctx.fill();
-    ctx.fillStyle = '#ffd9a8';
-    S.ellipse(ctx, 0, -10, 13, 11, 0); ctx.fill();
-    ctx.fillStyle = '#3a3f55';
-    S.roundRect(ctx, -13, -18, 26, 7, 3); ctx.fill();
-    ctx.fillStyle = '#7bd2ff';
-    S.ellipse(ctx, -5, -15, 4, 3.4, 0); ctx.fill();
-    S.ellipse(ctx, 6, -15, 4, 3.4, 0); ctx.fill();
-    ctx.fillStyle = '#e8a33c';
-    S.ellipse(ctx, -9, -6, 9, 3.4, .3); ctx.fill();
-    S.ellipse(ctx, 9, -6, 9, 3.4, -.3); ctx.fill();
-    ctx.fillStyle = '#ffd9a8';
-    S.ellipse(ctx, 0, -3, 4, 3, 0); ctx.fill();
+    if (face < 0) ctx.scale(-1, 1);
+    ctx.fillStyle = '#ffffff';
+    S.poly(ctx, [-35, 5, -31, -1, -27, 3, -23, -1, -19, 5, -21, 5, -23, 2, -27, 5, -31, 2, -33, 5]);
+    ctx.fill();
+    S.text(ctx, 'MASTER', 27, 5.4, { size: 6.5, align: 'center', color: '#ffffff', shadow: false });
     ctx.restore();
+
+    // cupula
+    ctx.fillStyle = 'rgba(190,230,255,.4)';
+    ctx.beginPath(); ctx.arc(0, -2, 27, Math.PI, 0); ctx.closePath(); ctx.fill();
+
+    // ---- Daniel Vocaro ----
+    ctx.save();
+    ctx.translate(1, -3);
+    // terno
+    ctx.fillStyle = '#1e2740';
+    S.roundRect(ctx, -16, -8, 32, 16, 6); ctx.fill();
+    ctx.fillStyle = '#2b3856';
+    S.roundRect(ctx, -16, -8, 32, 6, 4); ctx.fill();
+    ctx.fillStyle = '#ffffff';
+    S.poly(ctx, [-5, -9, 5, -9, 3, -1, 0, 2, -3, -1]); ctx.fill();
+    ctx.fillStyle = '#4f7fc4';
+    S.poly(ctx, [-2.4, -8, 2.4, -8, 3, -5, 0, 5, -3, -5]); ctx.fill();
+    ctx.fillStyle = '#8fb4e6';
+    for (var k = 0; k < 3; k++) {
+      S.poly(ctx, [-2.6, -6 + k * 3.2, 2.6, -6.9 + k * 3.2, 2.6, -5.9 + k * 3.2, -2.6, -5 + k * 3.2]);
+      ctx.fill();
+    }
+    ctx.fillStyle = '#2b3856';
+    S.poly(ctx, [-5, -9, -12, -6, -7, 2]); ctx.fill();
+    S.poly(ctx, [5, -9, 12, -6, 7, 2]); ctx.fill();
+    // rosto
+    ctx.fillStyle = '#f0b98e';
+    S.ellipse(ctx, 0, -20, 12.5, 13.5, 0); ctx.fill();
+    ctx.fillStyle = '#d99a6c';
+    S.ellipse(ctx, -12, -19, 2.4, 3.6, 0); ctx.fill();
+    S.ellipse(ctx, 12, -19, 2.4, 3.6, 0); ctx.fill();
+    // barba curta
+    ctx.save();
+    ctx.globalAlpha = .7; ctx.fillStyle = '#4a2f18';
+    ctx.beginPath(); ctx.ellipse(0, -21, 10.5, 9.5, 0, 0, Math.PI); ctx.closePath(); ctx.fill();
+    ctx.restore();
+    ctx.fillStyle = '#5a3a20';
+    S.ellipse(ctx, 0, -18.4, 4.8, 1.5, 0); ctx.fill();
+    // cabelo ondulado castanho
+    ctx.fillStyle = '#6b4526';
+    ctx.beginPath(); ctx.ellipse(0, -25, 13, 11, 0, Math.PI, 0); ctx.closePath(); ctx.fill();
+    S.ellipse(ctx, -11.5, -24, 3.4, 6, .25); ctx.fill();
+    S.ellipse(ctx, 11.5, -24, 3.4, 6, -.25); ctx.fill();
+    ctx.fillStyle = '#8a5c33';
+    S.ellipse(ctx, -4.5, -32, 6.4, 3.2, -.3); ctx.fill();
+    S.ellipse(ctx, 6, -31.5, 5, 2.6, .25); ctx.fill();
+    // sobrancelhas, olhos e sorriso
+    ctx.fillStyle = '#4a3018';
+    S.ellipse(ctx, -5, -24.5, 3.6, 1.2, -.14); ctx.fill();
+    S.ellipse(ctx, 5, -24.5, 3.6, 1.2, .14); ctx.fill();
+    ctx.fillStyle = '#ffffff';
+    S.ellipse(ctx, -4.6, -21, 3.2, 3, 0); ctx.fill();
+    S.ellipse(ctx, 4.6, -21, 3.2, 3, 0); ctx.fill();
+    ctx.fillStyle = '#3f5a3a';
+    S.circle(ctx, -4.4, -20.8, 1.5); ctx.fill();
+    S.circle(ctx, 4.8, -20.8, 1.5); ctx.fill();
+    ctx.fillStyle = '#16181f';
+    S.circle(ctx, -4.4, -20.8, .7); ctx.fill();
+    S.circle(ctx, 4.8, -20.8, .7); ctx.fill();
+    ctx.fillStyle = '#d99a6c';
+    S.ellipse(ctx, 0.4, -16.6, 2.4, 2, 0); ctx.fill();
+    ctx.fillStyle = '#7a3b3b';
+    S.ellipse(ctx, 0.4, -12.6, 5, 2.6, 0); ctx.fill();
+    ctx.fillStyle = '#ffffff';
+    S.ellipse(ctx, 0.4, -13.4, 4.6, 1.5, 0); ctx.fill();
+    ctx.restore();
+
+    ctx.strokeStyle = 'rgba(210,240,255,.55)'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(0, -2, 27, Math.PI, 0); ctx.stroke();
     ctx.restore();
   };
 

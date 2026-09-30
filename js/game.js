@@ -148,6 +148,7 @@
       phase: 'play', phaseT: 0,
       checkpoint: null, entities: [], boss: null,
       bossActive: false, bossDown: false,
+      bossIntro: 0, bossIntroT: 0, bankMode: false,
       cam: { x: 0, y: 0, lock: null, lookY: 0 },
       timeWarn: false, nextLife: 100,
       results: null, emeraldWon: false
@@ -184,7 +185,7 @@
       if (this.phase !== 'play') return;
       if (this.player.superForm) { S.Audio.playMusic('invincible'); return; }
       if (this.player.invincTimer > 0) { S.Audio.playMusic('invincible'); return; }
-      if (this.bossActive && !this.bossDown) { S.Audio.playMusic('boss'); return; }
+      if (this.bossActive && !this.bossDown) { S.Audio.playBossTheme(); return; }
       S.Audio.playMusic(this.zone.music, { tempoScale: this.player.shoesTimer > 0 ? 1.22 : 1 });
     };
 
@@ -246,12 +247,26 @@
       this.phase = 'dead'; this.phaseT = 0;
     };
 
+    g.startBossIntro = function () {
+      this.bossIntro = 1;
+      this.bossIntroT = 0;
+      this.bankMode = false;
+      this.cam.lock = { min: this.level.bossGateX, max: this.level.bossEndX - S.W };
+      this.player.controlEnabled = false;
+      this.player.gsp = 0;
+      this.player.rolling = false;
+      S.Audio.stopMusic();
+      S.Audio.stopVoice();
+    };
+
     g.onBossDying = function () { this.bossDown = true; };
 
     g.onBossDefeated = function () {
       this.score += 1000;
       this.cam.lock = null;
       this.bossActive = false;
+      this.bankMode = false;
+      S.Audio.stopBossTheme();
       S.Particles.popup(this.player.x, this.player.y - 60, 'EGGMAN DERROTADO!', '#ffd23c');
       this.restoreMusic();
     };
@@ -351,13 +366,10 @@
       S.Loops.check(p, g);
 
       // porta do chefe
-      if (g.def.boss && !g.bossActive && !g.bossDown && p.x > lv.bossGateX + 60) {
-        g.bossActive = true;
-        g.boss = S.Entities.make.boss({ kind: 'boss', x: lv.bossX, y: 210 }, g.def.boss);
-        g.entities.push(g.boss);
-        g.cam.lock = { min: lv.bossGateX, max: lv.bossEndX - S.W };
-        S.Audio.playMusic('boss');
+      if (g.def.boss && !g.bossActive && !g.bossDown && !g.bossIntro && p.x > lv.bossGateX + 60) {
+        g.startBossIntro();
       }
+      if (g.bossIntro) S.Play.bossIntro(g);
       if (g.cam.lock) {
         p.x = S.clamp(p.x, lv.bossGateX + 20, lv.bossEndX - 20);
       }
@@ -377,6 +389,48 @@
 
       if (g.phase === 'clear') g.phaseT++;
       if (g.phase === 'dead') g.phaseT++;
+    },
+
+    /* marcos da abertura do chefe, em quadros */
+    BI: { ALERTA: 24, BATIDA1: 72, BATIDA2: 104, BATIDA3: 128, TREMOR: 134,
+          ESTOURO: 172, REVELA: 178, FIM: 268 },
+
+    bossIntro: function (g) {
+      var B = S.Play.BI;
+      var t = g.bossIntroT++;
+      var p = g.player;
+
+      p.gsp = S.approach(p.gsp, 0, .3);
+      if (t === B.ALERTA) S.Audio.sfx('warn');
+      if (t === B.BATIDA1 || t === B.BATIDA2 || t === B.BATIDA3) {
+        S.Audio.sfx('bosshit');
+        g.shake(5);
+      }
+      if (t >= B.TREMOR && t < B.ESTOURO) {
+        if (t % 6 === 0) g.shake(2 + (t - B.TREMOR) * .18);
+        if (t % 9 === 0) {
+          S.Particles.spawn({ type: 'dust', x: g.cam.x + S.rand(40, S.W - 40),
+            y: g.cam.y + S.H - 40, vx: S.rand(-.4, .4), vy: -S.rand(.6, 1.6),
+            g: -.01, life: 34, size: S.rand(2, 5), color: '#cfd7e8' });
+        }
+      }
+      if (t === B.ESTOURO) {
+        S.Audio.sfx('explode');
+        g.shake(20);
+      }
+      if (t === B.REVELA) {
+        g.bankMode = true;
+        g.bossActive = true;
+        g.boss = S.Entities.make.boss({ kind: 'boss', x: g.level.bossX, y: 210 }, g.def.boss);
+        g.entities.push(g.boss);
+        S.Audio.playBossTheme();
+        S.Particles.burst(g.level.bossX, 150, 26,
+          { color: '#9fd4ff', maxSpeed: 6, life: 34, size: 5 });
+      }
+      if (t >= B.FIM) {
+        g.bossIntro = 0;
+        p.controlEnabled = true;
+      }
     },
 
     camera: function (g) {
@@ -404,7 +458,7 @@
       var lv = g.level, cam = g.cam;
       var cx = Math.round(cam.x), cy = Math.round(cam.y);
 
-      S.Gfx.drawBackground(ctx, lv.theme, { x: cx, y: cy }, g.frames);
+      S.Gfx.drawBackground(ctx, g.bankMode ? 'banco' : lv.theme, { x: cx, y: cy }, g.frames);
       S.Loops.draw(ctx, { level: lv, cam: { x: cx, y: cy } }, false);
       ctx.drawImage(lv.canvas, cx, cy, S.W, S.H, 0, 0, S.W, S.H);
 
@@ -427,6 +481,7 @@
       }
 
       S.UI.vignette(ctx, .35);
+      if (g.bossIntro) S.Play.drawBossIntro(ctx, g);
       S.HUD.draw(ctx, g);
 
       if (g.superHint > 0 && !g.player.superForm) {
@@ -441,6 +496,98 @@
           size: 34, align: 'center', color: '#ffd23c', outline: '#3a1d00', outlineW: 6, shadow: false });
         ctx.restore();
       }
+    }
+  };
+})();
+
+/* ---------------- abertura do chefe: suspense ---------------- */
+(function () {
+  'use strict';
+  var S = window.S;
+
+  S.Play.drawBossIntro = function (ctx, g) {
+    var B = S.Play.BI, t = g.bossIntroT;
+
+    // escurecimento crescente
+    var dark = 0;
+    if (t < B.ESTOURO) dark = S.clamp((t - 16) / (B.ESTOURO - 16), 0, 1) * .72;
+    else dark = Math.max(0, .72 - (t - B.ESTOURO) * .05);
+    if (dark > 0) {
+      ctx.save();
+      ctx.globalAlpha = dark;
+      ctx.fillStyle = '#04060f';
+      ctx.fillRect(0, 0, S.W, S.H);
+      ctx.restore();
+      S.UI.vignette(ctx, dark);
+    }
+
+    // pulsos vermelhos nas batidas
+    [B.BATIDA1, B.BATIDA2, B.BATIDA3].forEach(function (b) {
+      var d = t - b;
+      if (d >= 0 && d < 16) {
+        ctx.save();
+        ctx.globalCompositeOperation = 'lighter';
+        ctx.globalAlpha = (1 - d / 16) * .3;
+        ctx.fillStyle = '#ff2b2b';
+        ctx.fillRect(0, 0, S.W, S.H);
+        ctx.restore();
+      }
+    });
+
+    // alerta piscando
+    if (t > B.ALERTA && t < B.ESTOURO) {
+      var pisca = Math.floor(t / 10) % 2 === 0;
+      if (pisca) {
+        S.text(ctx, '!', S.W / 2, 132, {
+          size: 74, align: 'center', weight: '900', color: '#ff3b3b',
+          outline: '#2a0000', outlineW: 8, shadow: false
+        });
+        S.text(ctx, 'ALGO SE APROXIMA', S.W / 2, 172, {
+          size: 17, align: 'center', color: '#ffd23c',
+          outline: 'rgba(0,0,0,.85)', outlineW: 5, shadow: false
+        });
+      }
+      // barras de cinema
+      var bar = S.clamp((t - B.ALERTA) / 40, 0, 1) * 34;
+      ctx.fillStyle = '#04060f';
+      ctx.fillRect(0, 0, S.W, bar);
+      ctx.fillRect(0, S.H - bar, S.W, bar);
+    }
+
+    // clarao da revelacao
+    var f = t - B.ESTOURO;
+    if (f >= 0 && f < 14) {
+      ctx.save();
+      ctx.globalAlpha = 1 - f / 14;
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, S.W, S.H);
+      ctx.restore();
+    }
+
+    // cartao com o nome do chefe
+    if (t > B.REVELA && t < B.FIM) {
+      var k = t - B.REVELA;
+      var ent = S.clamp(k / 16, 0, 1);
+      var sai = S.clamp((B.FIM - t) / 18, 0, 1);
+      ctx.save();
+      ctx.globalAlpha = Math.min(ent, sai);
+      ctx.translate((1 - ent) * -90, 0);
+      var y = S.H - 92;
+      ctx.fillStyle = 'rgba(8,18,44,.88)';
+      S.roundRect(ctx, S.W / 2 - 190, y, 380, 62, 8); ctx.fill();
+      ctx.strokeStyle = '#2f6fd8'; ctx.lineWidth = 2;
+      S.roundRect(ctx, S.W / 2 - 190, y, 380, 62, 8); ctx.stroke();
+      ctx.fillStyle = '#2f6fd8';
+      S.roundRect(ctx, S.W / 2 - 180, y + 12, 38, 38, 5); ctx.fill();
+      S.Gfx.logoM(ctx, S.W / 2 - 161, y + 32, 1.9, '#ffffff');
+      S.text(ctx, 'DANIEL VOCARO', S.W / 2 - 128, y + 30, {
+        size: 22, weight: '900', color: '#ffffff',
+        outline: 'rgba(0,0,0,.7)', outlineW: 4, shadow: false
+      });
+      S.text(ctx, 'BANCO MASTER', S.W / 2 - 128, y + 50, {
+        size: 13, color: '#9fc4ff', shadow: false
+      });
+      ctx.restore();
     }
   };
 })();

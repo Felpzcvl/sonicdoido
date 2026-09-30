@@ -717,6 +717,14 @@
       accent: '#42f2c8', water: 'rgba(120,60,220,.4)',
       music: 'zone2'
     },
+    banco: {
+      name: 'BANCO MASTER',
+      sky: ['#2f8ce0', '#6fc0f2', '#bfe4fb'],
+      grass: '#2f6fd8', grassDark: '#16305e', grassLight: '#7fb6ff',
+      dirt: '#8f96a8', dirt2: '#767e92', edge: '#3a4054',
+      accent: '#ffd23c', water: 'rgba(90,150,240,.35)',
+      music: 'boss'
+    },
     camara: {
       name: 'CAMARA DOS DEPUTADOS',
       sky: ['#150f14', '#241a1c', '#33261f'],
@@ -772,6 +780,7 @@
     if (theme === 'hill') Gfx.bgHill(ctx, th, cam, t);
     else if (theme === 'lagoon') Gfx.bgLagoon(ctx, th, cam, t);
     else if (theme === 'congresso') Gfx.bgCongresso(ctx, th, cam, t);
+    else if (theme === 'banco') Gfx.bgBanco(ctx, th, cam, t);
     else if (theme === 'camara') Gfx.bgCamara(ctx, th, cam, t);
     else if (theme === 'senado') Gfx.bgSenado(ctx, th, cam, t);
     else if (theme === 'stf') Gfx.bgSTF(ctx, th, cam, t);
@@ -2040,5 +2049,158 @@
       ctx.fillStyle = '#12308f';
       S.circle(ctx, x + 172, roofY - 55 + w * .4, 3.2); ctx.fill();
     });
+  };
+})();
+
+/* ---------- cenário: sede do Banco Master ---------- */
+(function () {
+  'use strict';
+  var S = window.S, Gfx = S.Gfx;
+
+  function nuvem(ctx, x, y, s) {
+    ctx.fillStyle = '#ffffff';
+    S.roundRect(ctx, x, y, 54 * s, 12 * s, 6 * s); ctx.fill();
+    S.roundRect(ctx, x + 12 * s, y - 9 * s, 34 * s, 14 * s, 7 * s); ctx.fill();
+    ctx.fillStyle = '#d9e8f7';
+    S.roundRect(ctx, x, y + 8 * s, 54 * s, 4 * s, 2 * s); ctx.fill();
+  }
+
+  function logoM(ctx, x, y, s, cor) {
+    ctx.fillStyle = cor || '#ffffff';
+    S.poly(ctx, [x - 9 * s, y + 8 * s, x - 6 * s, y - 8 * s, x, y + 1 * s,
+                 x + 6 * s, y - 8 * s, x + 9 * s, y + 8 * s, x + 5 * s, y + 8 * s,
+                 x + 3.5 * s, y - 1 * s, x, y + 6 * s, x - 3.5 * s, y - 1 * s,
+                 x - 5 * s, y + 8 * s]);
+    ctx.fill();
+  }
+  Gfx.logoM = logoM;
+
+  Gfx.bgBanco = function (ctx, th, cam, t) {
+    var band = Gfx.bgBand, py = -cam.y * .05, i;
+
+    // nuvens
+    for (i = 0; i < 7; i++) {
+      var cx = ((i * 190 - cam.x * .07 - t * .09) % 900 + 900) % 900 - 120;
+      nuvem(ctx, cx, 26 + (i % 3) * 30 + py, .8 + (i % 2) * .45);
+    }
+
+    // skyline ao fundo
+    band(cam, .12, 96, function (x, i2) {
+      var h = 110 + ((i2 * 53) % 90);
+      ctx.fillStyle = '#7fa9d8';
+      ctx.fillRect(x, 236 + py - h, 64, h);
+      ctx.fillStyle = 'rgba(255,255,255,.22)';
+      for (var w = 0; w < 6; w++) ctx.fillRect(x + 6 + (w % 3) * 20, 244 + py - h + Math.floor(w / 3) * 26, 12, 14);
+    });
+
+    // arvores
+    band(cam, .2, 84, function (x) {
+      ctx.fillStyle = '#2f7a3a';
+      S.circle(ctx, x + 18, 214 + py, 20); ctx.fill();
+      ctx.fillStyle = '#3f9a4a';
+      S.circle(ctx, x + 12, 208 + py, 13); ctx.fill();
+      ctx.fillStyle = '#5a3a20';
+      ctx.fillRect(x + 15, 214 + py, 6, 24);
+    });
+
+    // sede envidracada
+    var topo = 62 + py, base = 240 + py;
+    band(cam, .3, 620, function (x) {
+      // bloco lateral claro
+      ctx.fillStyle = '#cfd6e4';
+      ctx.fillRect(x + 470, topo + 26, 110, base - topo - 26);
+      ctx.fillStyle = '#b6bfd2';
+      ctx.fillRect(x + 470, topo + 26, 110, 6);
+
+      // torre de vidro
+      ctx.fillStyle = '#16305e';
+      ctx.fillRect(x + 60, topo, 420, base - topo);
+      for (var r = 0; r < 9; r++) {
+        for (var c = 0; c < 17; c++) {
+          ctx.fillStyle = ((r + c) % 5 === 0) ? '#2f6fd8' : ((r + c) % 3 === 0 ? '#12274d' : '#1b3d78');
+          ctx.fillRect(x + 66 + c * 24, topo + 8 + r * 19, 20, 15);
+        }
+      }
+
+      // letreiro
+      ctx.fillStyle = '#0f2450';
+      S.roundRect(ctx, x + 150, topo + 22, 250, 58, 4); ctx.fill();
+      ctx.fillStyle = '#2f6fd8';
+      S.roundRect(ctx, x + 160, topo + 28, 46, 46, 5); ctx.fill();
+      logoM(ctx, x + 183, topo + 50, 2.3, '#ffffff');
+      S.text(ctx, 'BANCO', x + 220, topo + 48, { size: 17, color: '#e8eefc', shadow: false });
+      S.text(ctx, 'MASTER', x + 220, topo + 71, { size: 23, weight: '900', color: '#ffffff', shadow: false });
+
+      // marquise e entrada
+      ctx.fillStyle = '#e4e9f5';
+      ctx.fillRect(x + 176, base - 74, 230, 14);
+      ctx.fillStyle = '#b6bfd2';
+      ctx.fillRect(x + 176, base - 60, 230, 5);
+      for (var L = 0; L < 5; L++) {
+        ctx.save();
+        ctx.globalCompositeOperation = 'lighter';
+        ctx.fillStyle = 'rgba(255,220,140,.30)';
+        S.circle(ctx, x + 206 + L * 42, base - 56, 15); ctx.fill();
+        ctx.restore();
+        ctx.fillStyle = '#ffd88a';
+        S.circle(ctx, x + 206 + L * 42, base - 58, 4); ctx.fill();
+      }
+      ctx.fillStyle = '#f2c56b';
+      ctx.fillRect(x + 196, base - 56, 190, 56);
+      ctx.fillStyle = '#e0a94a';
+      for (var d = 0; d < 6; d++) ctx.fillRect(x + 200 + d * 32, base - 52, 26, 48);
+      ctx.fillStyle = '#16305e';
+      ctx.fillRect(x + 268, base - 50, 46, 50);
+      ctx.fillStyle = '#7fb0e8';
+      ctx.fillRect(x + 272, base - 46, 18, 42);
+      ctx.fillRect(x + 292, base - 46, 18, 42);
+
+      // mastro com bandeira
+      ctx.fillStyle = '#c3cbdb';
+      ctx.fillRect(x + 36, topo + 4, 4, base - topo - 4);
+      var w2 = Math.sin(t * .05) * 3;
+      ctx.fillStyle = '#1aa053';
+      S.poly(ctx, [x + 40, topo + 10, x + 88, topo + 6 + w2, x + 88, topo + 38 + w2, x + 40, topo + 42]); ctx.fill();
+      ctx.fillStyle = '#ffd23c';
+      S.poly(ctx, [x + 50, topo + 26, x + 64, topo + 14 + w2 * .6, x + 78, topo + 26 + w2, x + 64, topo + 38 + w2 * .4]); ctx.fill();
+      ctx.fillStyle = '#12308f';
+      S.circle(ctx, x + 64, topo + 26 + w2 * .5, 5); ctx.fill();
+
+      // totem
+      ctx.fillStyle = '#0f2450';
+      S.roundRect(ctx, x - 24, base - 124, 74, 124, 4); ctx.fill();
+      ctx.fillStyle = '#2f6fd8';
+      S.roundRect(ctx, x - 12, base - 112, 50, 44, 4); ctx.fill();
+      logoM(ctx, x + 13, base - 90, 2.2, '#ffffff');
+      S.text(ctx, 'BANCO', x + 13, base - 52, { size: 11, align: 'center', color: '#e8eefc', shadow: false });
+      S.text(ctx, 'MASTER', x + 13, base - 36, { size: 14, align: 'center', weight: '900', color: '#ffffff', shadow: false });
+
+      // placa de valores
+      ctx.fillStyle = '#131a2c';
+      S.roundRect(ctx, x + 496, base - 74, 128, 74, 3); ctx.fill();
+      ctx.fillStyle = '#2f6fd8';
+      ctx.fillRect(x + 504, base - 66, 4, 56);
+      S.text(ctx, 'SOLIDEZ', x + 516, base - 52, { size: 11, color: '#ffffff', shadow: false });
+      S.text(ctx, 'CONFIANCA', x + 516, base - 34, { size: 11, color: '#ffffff', shadow: false });
+      S.text(ctx, 'RESULTADOS', x + 516, base - 16, { size: 11, color: '#ffffff', shadow: false });
+    });
+
+    // arbustos
+    band(cam, .34, 46, function (x) {
+      ctx.fillStyle = '#2f7a3a';
+      S.roundRect(ctx, x, base - 22, 40, 22, 9); ctx.fill();
+      ctx.fillStyle = '#4aa356';
+      S.roundRect(ctx, x + 3, base - 22, 34, 9, 5); ctx.fill();
+    });
+
+    // calcada e rua
+    ctx.fillStyle = '#c3c9d6';
+    ctx.fillRect(0, base, S.W, 30);
+    ctx.fillStyle = '#aeb5c4';
+    for (i = 0; i < 22; i++) ctx.fillRect((i * 40 - cam.x * .4) % (S.W + 40), base, 2, 30);
+    ctx.fillStyle = '#5b6070';
+    ctx.fillRect(0, base + 30, S.W, S.H);
+    ctx.fillStyle = '#7d8394';
+    ctx.fillRect(0, base + 30, S.W, 3);
   };
 })();

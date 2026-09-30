@@ -101,7 +101,7 @@
     gr.addColorStop(0, '#ff5c5c'); gr.addColorStop(1, '#ffd23c');
     ctx.fillStyle = gr;
     S.roundRect(ctx, x, y, Math.max(2, w * f), 12, 4); ctx.fill();
-    S.text(ctx, 'DR. EGGMAN', S.W / 2, y - 8, {
+    S.text(ctx, 'DANIEL VOCARO', S.W / 2, y - 8, {
       size: 12, color: '#ffffff', align: 'center', outline: 'rgba(0,0,0,.8)', outlineW: 3, shadow: false });
   };
 })();

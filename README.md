@@ -54,7 +54,7 @@ própria fala tocada na tela de seleção.
 Qualquer um quebra os blocos `X` rolando neles em velocidade.
 
 As vozes ficam em `audio/` (`lula.mp3`, `bolsonaro.mp3`, `alexandre.mp3`,
-`renan.mp3`) — troque os arquivos mantendo os nomes para mudar as falas.
+`renan.mp3`), junto do tema do chefe (`boss-daniel.mp3`) — troque os arquivos mantendo os nomes para mudar as falas.
 
 Na tela de seleção a fala toca ao entrar e a cada vez que você muda de
 personagem, com a música abaixada automaticamente para não atrapalhar. Aperte
@@ -70,7 +70,10 @@ a fase começa.
   - **Senado Federal** — cúpula dourada, arquibancadas azuis e a mesa diretora
   - **Supremo Tribunal Federal** — fachada envidraçada ao pôr do sol, a estátua
     da Justiça e o espelho d'água
-- **3 chefes** diferentes (bola de demolição, broca e canhão laser)
+- **3 chefes** diferentes (bola de demolição, broca e canhão laser), todos
+  pilotados por **Daniel Vocaro**. A chegada tem uma sequência de suspense —
+  a música para, a tela escurece, o chão treme e o alerta pisca — e, na
+  revelação, o cenário vira a sede do **Banco Master** e entra o tema dele
 - **Fase especial em túnel 3D** para pegar as 6 **Esmeraldas do Caos**
 - **Super forma** ao juntar as 6 esmeraldas e 50 anéis
 - Anéis, monitores de item (anéis, escudo, invencibilidade, tênis velozes, 1UP),

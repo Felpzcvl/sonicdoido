@@ -165,7 +165,10 @@
     this.tempoScale = ts;
   };
 
-  A.stopMusic = function () { this.playing = false; this.currentId = null; };
+  A.stopMusic = function () {
+    this.playing = false; this.currentId = null;
+    if (this.stopBossTheme) this.stopBossTheme();
+  };
   A.mtof = function (m) { return 440 * Math.pow(2, (m - 69) / 12); };
 
   A.tick = function () {
@@ -379,5 +382,53 @@
     try { el.currentTime = 0; } catch (e) {}
     var p = el.play();
     if (p && p.catch) p.catch(function () { A.unduck(); });
+  };
+})();
+
+/* ---------------- tema do chefe (arquivo) ---------------- */
+(function () {
+  'use strict';
+  var A = window.S.Audio;
+
+  A.BOSS_THEME = 'audio/boss-daniel.mp3';
+  A._bossEl = null;
+
+  A.bossThemeEl = function () {
+    if (!this._bossEl) {
+      var el = new Audio(this.BOSS_THEME);
+      el.preload = 'auto';
+      el.loop = true;
+      el.volume = Math.min(1, this.musicVol);
+      this._bossEl = el;
+    }
+    return this._bossEl;
+  };
+
+  A.playBossTheme = function () {
+    this.resume();
+    this.stopMusic();
+    var el = this.bossThemeEl();
+    el.volume = Math.min(1, this.musicVol);
+    try { el.currentTime = 0; } catch (e) {}
+    var p = el.play();
+    if (p && p.catch) p.catch(function () {});
+    this.bossPlaying = true;
+  };
+
+  A.stopBossTheme = function () {
+    if (!this._bossEl) return;
+    try { this._bossEl.pause(); this._bossEl.currentTime = 0; } catch (e) {}
+    this.bossPlaying = false;
+  };
+
+  A.bossThemeIsPlaying = function () {
+    return !!(this._bossEl && !this._bossEl.paused);
+  };
+
+  /* o volume da musica tambem controla o tema do chefe */
+  var setMusic = A.setMusicVol;
+  A.setMusicVol = function (v) {
+    setMusic.call(this, v);
+    if (this._bossEl) this._bossEl.volume = Math.min(1, v);
   };
 })();

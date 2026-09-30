@@ -511,6 +511,8 @@
     sess.time = cp ? cp.time : 0;
     sess.phase = 'play'; sess.phaseT = 0;
     sess.boss = null; sess.bossActive = false; sess.bossDown = false;
+    sess.bossIntro = 0; sess.bossIntroT = 0; sess.bankMode = false;
+    S.Audio.stopBossTheme();
     sess.cam.lock = null;
     sess.timeOver = false;
     sess.nextLife = 100;
@@ -563,9 +565,11 @@
     enter: function (g, o) {
       this.play = o.play; this.sel = 0; this.t = 0;
       if (S.Audio.musicBus) S.Audio.musicBus.gain.value = S.Save.data.options.music * .3;
+      if (S.Audio._bossEl) S.Audio._bossEl.volume = Math.min(1, S.Save.data.options.music * .3);
     },
     exit: function () {
       if (S.Audio.musicBus) S.Audio.musicBus.gain.value = S.Save.data.options.music;
+      if (S.Audio._bossEl) S.Audio._bossEl.volume = Math.min(1, S.Save.data.options.music);
     },
     items: [{ label: 'CONTINUAR' }, { label: 'REINICIAR ATO' }, { label: 'SAIR PARA O MENU' }],
     update: function (g) {
