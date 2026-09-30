@@ -17,9 +17,9 @@
       tie: '#cf2b25', tie2: '#8d1d17', shirt: '#ffffff', card: '#c0392b', pickup: 'picanha',
       shoe: '#15181f', shoeB: '#2a2f3c', cuff: '#ffffff', pin: false,
       superBody: '#ffe14d', superBody2: '#fff5a8', superDark: '#e0a91a',
-      top: 5.9, jump: 6.2, acc: 0.046875,
-      ability: 'PLANEIO E ESCALADA',
-      desc: 'Planeia no ar e escala paredes. Quebra blocos no impacto.'
+      top: 6.2, jump: 6.6, acc: 0.046875,
+      ability: 'VOO, PLANEIO, PISAO E DROP DASH',
+      desc: 'Junta picanhas. Mesmos poderes e velocidade de todos.'
     },
     bolsonaro: {
       name: 'BOLSONARO', full: 'JAIR BOLSONARO',
@@ -32,8 +32,8 @@
       shoe: '#15181f', shoeB: '#2a2f3c', cuff: '#ffffff', pin: true,
       superBody: '#ffe14d', superBody2: '#fff5a8', superDark: '#e0a91a',
       top: 6.2, jump: 6.6, acc: 0.046875,
-      ability: 'ARRANCADA (SPIN DASH + DROP DASH)',
-      desc: 'O mais rapido. Equilibrado e com o Drop Dash no ar.'
+      ability: 'VOO, PLANEIO, PISAO E DROP DASH',
+      desc: 'Junta pilulas azuis. Mesmos poderes e velocidade de todos.'
     },
     alexandre: {
       name: 'ALEXANDRE DE MORAIS', full: 'ALEXANDRE DE MORAIS',
@@ -46,9 +46,9 @@
       shoe: '#101014', shoeB: '#25252d', cuff: '#bcd4f5',
       pin: false, card: '#2a3a6e', pickup: 'dinheiro',
       superBody: '#ffe14d', superBody2: '#fff5a8', superDark: '#e0a91a',
-      top: 5.8, jump: 6.3, acc: 0.046875,
-      ability: 'PISAO (APERTE O PULO NO AR)',
-      desc: 'Mergulha no chao, quebra blocos e solta onda de choque.'
+      top: 6.2, jump: 6.6, acc: 0.046875,
+      ability: 'VOO, PLANEIO, PISAO E DROP DASH',
+      desc: 'Junta dinheiro. Mesmos poderes e velocidade de todos.'
     },
     renan: {
       name: 'RENAN SANTOS', full: 'RENAN SANTOS',
@@ -60,9 +60,9 @@
       tie: '#1c2440', tie2: '#2c3860', shirt: '#ffffff', card: '#3b4a86',
       shoe: '#15181f', shoeB: '#2a2f3c', cuff: '#ffffff', pin: false,
       superBody: '#ffe14d', superBody2: '#fff9c8', superDark: '#dca516',
-      top: 5.7, jump: 6.4, acc: 0.046875,
-      ability: 'IMPULSO AEREO (APERTE O PULO NO AR)',
-      desc: 'Flutua no ar apertando o pulo de novo. Alcanca qualquer lugar.'
+      top: 6.2, jump: 6.6, acc: 0.046875,
+      ability: 'VOO, PLANEIO, PISAO E DROP DASH',
+      desc: 'Junta aneis. Mesmos poderes e velocidade de todos.'
     }
   };
 

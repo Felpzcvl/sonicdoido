@@ -130,7 +130,7 @@
       var pb = p.hitbox(), mb = E.box(this);
       if (!S.aabb(mb, pb)) return;
       var breaking = p.rolling || (!p.grounded && p.jumping) || p.invincTimer > 0 ||
-                     p.superForm || (p.charId === 'lula' && p.gliding);
+                     p.superForm || p.gliding;
       if (breaking) { this.pop(g, p); return; }
       if (p.vy >= 0 && pb.y + pb.h - Math.max(1, p.vy) <= mb.y + 8) { p.landOn(mb.y); }
       else {

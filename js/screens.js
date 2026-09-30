@@ -360,8 +360,8 @@
         ['SETA BAIXO', 'Rolar em movimento'],
         ['BAIXO + PULO', 'Spin Dash (carregar)'],
         ['ESPACO / Z', 'Pular'],
-        ['PULO NO AR', 'Habilidade especial'],
-        ['X / SHIFT', 'Virar Super (6 esmeraldas)'],
+        ['PULO NO AR', 'Voar (2o toque)'],
+        ['X / SHIFT', 'Planar no ar e virar Super'],
         ['ENTER / P', 'Pausar'],
         ['ESC', 'Voltar / cancelar']
       ];
@@ -371,15 +371,32 @@
         S.text(ctx, rows[i][1], 156, y, { size: 12, color: '#e6ecff', shadow: false });
       }
       S.UI.panel(ctx, 334, 48, S.W - 358, 272);
-      S.text(ctx, 'HABILIDADES', 352, 76, { size: 15, color: '#ffd23c', shadow: false });
+      S.text(ctx, 'HABILIDADES  (iguais para todos)', 350, 72, {
+        size: 13, color: '#ffd23c', shadow: false });
+      var hab = [
+        ['PULO NO AR (2o toque)', 'VOAR'],
+        ['SEGURAR O PULO', 'DROP DASH'],
+        ['BAIXO + PULO NO AR', 'PISAO'],
+        ['X NO AR', 'PLANAR / ESCALAR'],
+        ['BAIXO + PULO NO CHAO', 'SPIN DASH']
+      ];
+      for (var h = 0; h < hab.length; h++) {
+        var hy = 96 + h * 19;
+        S.text(ctx, hab[h][0], 350, hy, { size: 10, color: '#b9c6e6', shadow: false });
+        S.text(ctx, hab[h][1], S.W - 34, hy, { size: 10, color: '#9fe2ff', align: 'right', shadow: false });
+      }
+      ctx.fillStyle = 'rgba(160,190,255,.25)';
+      ctx.fillRect(350, 204, S.W - 384, 1);
+      S.text(ctx, 'O QUE CADA UM JUNTA', 350, 224, {
+        size: 13, color: '#ffd23c', shadow: false });
       var chars = ['lula', 'bolsonaro', 'alexandre', 'renan'];
       for (var k = 0; k < chars.length; k++) {
-        var c = S.Gfx.CHARS[chars[k]];
-        var yy = 88 + k * 57;
-        S.Gfx.drawChar(ctx, chars[k], { x: 378, y: yy + 34, state: 'idle', t: t + k * 20, facing: 1, scale: .74 });
-        S.text(ctx, c.name, 406, yy + 10, { size: 13, color: '#ffffff', shadow: false });
-        S.text(ctx, c.ability, 406, yy + 28, { size: 11, color: '#9fe2ff', shadow: false });
-        S.text(ctx, c.desc, 406, yy + 44, { size: 10, color: '#b9c6e6', shadow: false });
+        var yy = 246 + k * 20;
+        S.Gfx.drawChar(ctx, chars[k], { x: 360, y: yy + 7, state: 'idle', t: t + k * 20, facing: 1, scale: .38 });
+        S.text(ctx, S.Gfx.CHARS[chars[k]].name, 376, yy + 4, { size: 10, color: '#ffffff', shadow: false });
+        S.Gfx.pickup(ctx, S.W - 48, yy, t + k * 12, .7, chars[k]);
+        S.text(ctx, S.pickupLabel(chars[k]), S.W - 62, yy + 4, {
+          size: 9, color: '#9fe2ff', align: 'right', shadow: false });
       }
       S.UI.hint(ctx, 'ESC ou ENTER para voltar');
     }

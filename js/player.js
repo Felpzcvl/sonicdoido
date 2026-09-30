@@ -30,7 +30,7 @@
       invulnTimer: 0, invincTimer: 0, shoesTimer: 0,
       shield: null, superForm: false, superTimer: 0,
       hurtTimer: 0, dead: false, deadTimer: 0,
-      flying: false, flyTimer: 0, flyUp: 0, stomping: false,
+      flying: false, flyTimer: 0, flyUp: 0, stomping: false, superLock: 0,
       gliding: false, glideSpd: 0, climbing: false, slideTimer: 0,
       dropCharge: 0, dropReady: false,
       inWater: false, air: 1800,
@@ -50,7 +50,7 @@
       if (this.spindash) return true;
       if (this.rolling) return true;
       if (!this.grounded && this.jumping && !this.flying) return true;
-      if (this.charId === 'lula' && this.gliding) return true;
+      if (this.gliding) return true;
       if (this.stomping) return true;
       return false;
     };
@@ -371,7 +371,7 @@
     S.Player.wallCollide(p, lv);
     S.Player.ceilCollide(p, lv);
 
-    if (p.gliding && p.wallSide && p.charId === 'lula') {
+    if (p.gliding && p.wallSide) {
       p.gliding = false; p.climbing = true;
       p.vy = 0; p.vx = 0; p.face = p.wallSide;
       S.Audio.sfx('glide');
@@ -408,61 +408,76 @@
     if (p.slideT === undefined) p.slideT = 0;
   }
 
+  /* Todos os personagens compartilham o mesmo conjunto de habilidades.
+     pulo no ar (2o toque) .... voo
+     segurar o pulo ........... drop dash
+     baixo + pulo no ar ....... pisao
+     X no ar .................. planar (e escalar ao encostar na parede) */
   function abilities(p, g, ctrl, inx) {
     var In = S.Input;
-    if (!ctrl) return;
 
-    if (p.charId === 'renan') {
-      if (In.pressed('jump') && !p.flying && p.jumping) {
-        p.flying = true; p.jumping = false; p.flyTimer = 500; p.flyUp = 26;
-        S.Audio.sfx('fly');
-      } else if (p.flying) {
-        if (In.pressed('jump')) { p.flyUp = 26; S.Audio.sfx('fly'); }
-        if (p.flyUp > 0) p.flyUp--;
-        if (--p.flyTimer <= 0) { p.flying = false; }
-      }
-      return;
-    }
-
-    if (p.charId === 'alexandre') {
-      if (In.pressed('jump') && !p.stomping && p.jumping) {
-        p.stomping = true; p.jumping = false; p.rolling = false;
-        p.vy = 10; p.vx = 0;
-        S.Audio.sfx('spindash');
-      }
-      if (p.stomping && p.animT % 2 === 0) {
+    // rastro do pisao continua mesmo sem controle
+    if (p.stomping) {
+      if (p.animT % 2 === 0) {
         S.Particles.spawn({ type: 'dust', x: p.x + S.rand(-8, 8), y: p.y - 16,
           vx: 0, vy: -1.4, g: 0, life: 14, size: 3, color: '#cfe6ff' });
       }
       return;
     }
+    if (!ctrl) return;
 
-    if (p.charId === 'lula') {
-      if (In.pressed('jump') && !p.gliding && !p.climbing && p.jumping) {
-        p.gliding = true; p.jumping = false;
-        p.vy = 0; p.glideSpd = 4.2;
-        p.vx = p.face * p.glideSpd;
-        S.Audio.sfx('glide');
-      } else if (p.gliding) {
-        if (!In.held('jump')) { p.gliding = false; p.vy = 1; return; }
-        p.glideSpd = Math.min(7, p.glideSpd + .03);
-        if (inx !== 0 && inx !== p.face) {
-          p.glideSpd -= .22;
-          if (p.glideSpd <= .6) { p.face = inx; p.glideSpd = 1; }
-        }
-        p.vx = p.face * p.glideSpd;
-        if (p.animT % 6 === 0) {
-          S.Particles.spawn({ type: 'dust', x: p.x - p.face * 12, y: p.y - 16,
-            vx: -p.face * .4, vy: 0, g: 0, life: 14, size: 2, color: '#ffffff' });
-        }
+    var pulou = In.pressed('jump');
+
+    // 1) pisao
+    if (pulou && In.held('down') && !p.grounded && (p.jumping || p.flying || p.gliding)) {
+      p.stomping = true;
+      p.jumping = false; p.flying = false; p.gliding = false; p.climbing = false;
+      p.vy = 10; p.vx = 0;
+      S.Audio.sfx('spindash');
+      return;
+    }
+
+    // 2) planar / escalar
+    if (In.pressed('action') && !p.gliding && !p.climbing && !p.grounded && p.superLock <= 0) {
+      p.gliding = true; p.jumping = false; p.flying = false;
+      p.vy = 0; p.glideSpd = 4.2;
+      p.vx = p.face * p.glideSpd;
+      S.Audio.sfx('glide');
+      return;
+    }
+    if (p.gliding) {
+      if (!In.held('action')) { p.gliding = false; p.vy = 1; return; }
+      p.glideSpd = Math.min(7, p.glideSpd + .03);
+      if (inx !== 0 && inx !== p.face) {
+        p.glideSpd -= .22;
+        if (p.glideSpd <= .6) { p.face = inx; p.glideSpd = 1; }
+      }
+      p.vx = p.face * p.glideSpd;
+      if (p.animT % 6 === 0) {
+        S.Particles.spawn({ type: 'dust', x: p.x - p.face * 12, y: p.y - 16,
+          vx: -p.face * .4, vy: 0, g: 0, life: 14, size: 2, color: '#ffffff' });
       }
       return;
     }
 
-    // Sonic: drop dash
+    // 3) voo
+    if (pulou && !p.flying && p.jumping) {
+      p.flying = true; p.jumping = false;
+      p.flyTimer = 500; p.flyUp = 26;
+      S.Audio.sfx('fly');
+      return;
+    }
+    if (p.flying) {
+      if (pulou) { p.flyUp = 26; S.Audio.sfx('fly'); }
+      if (p.flyUp > 0) p.flyUp--;
+      if (--p.flyTimer <= 0) p.flying = false;
+      return;
+    }
+
+    // 4) drop dash
     if (p.jumping && !p.grounded) {
       if (In.held('jump')) {
-        if (p.dropCharge === 0 && !In.pressed('jump')) p.dropCharge = 1;
+        if (p.dropCharge === 0 && !pulou) p.dropCharge = 1;
         if (p.dropCharge > 0) {
           p.dropCharge++;
           if (p.dropCharge === 22) { p.dropReady = true; S.Audio.sfx('spindash'); }
@@ -512,6 +527,7 @@
     if (p.ctrlLock > 0) p.ctrlLock--;
     if (p.hurtTimer > 0) p.hurtTimer--;
     if (p.springTimer > 0) p.springTimer--;
+    if (p.superLock > 0) p.superLock--;
     if (p.shoesTimer > 0) { p.shoesTimer--; if (p.shoesTimer === 0) g.restoreMusic(); }
     if (p.invincTimer > 0) {
       p.invincTimer--;

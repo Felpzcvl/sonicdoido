@@ -355,7 +355,7 @@
       // transformação Super
       if (p.canSuper && !p.superForm && g.rings >= 50 && !p.grounded &&
           (p.jumping || p.rolling) && In.pressed('action')) {
-        p.superForm = true; p.superTimer = 0; p.invulnTimer = 0;
+        p.superForm = true; p.superTimer = 0; p.invulnTimer = 0; p.superLock = 6;
         S.Audio.sfx('emerald');
         S.Audio.playMusic('invincible');
         S.Particles.burst(p.x, p.y - 20, 26, { color: '#fff3a8', maxSpeed: 6, life: 34, size: 5 });

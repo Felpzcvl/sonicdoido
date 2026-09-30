@@ -30,8 +30,8 @@ E acesse <http://localhost:7788>.
 | Seta para baixo (em movimento) | Rolar |
 | Baixo + Pulo | Spin Dash (segure para carregar, solte o baixo) |
 | Espaço / Z / J | Pular |
-| Pulo no ar (2ª vez) | Habilidade especial do personagem |
-| X / Shift | Virar Super (com 6 esmeraldas e 50 anéis) |
+| Pulo no ar (2ª vez) | Voar |
+| X / Shift | Planar no ar · Virar Super (com 6 esmeraldas e 50 anéis) |
 | Enter / P | Pausar |
 | Esc | Voltar / cancelar |
 
@@ -44,19 +44,29 @@ Também funciona com **controle (gamepad)** e com **botões na tela** no celular
 Caricaturas desenhadas por código (nenhuma imagem externa), cada uma com sua
 própria fala tocada na tela de seleção.
 
-| Personagem | Habilidade |
+**Todos os quatro têm exatamente os mesmos poderes, a mesma velocidade e o
+mesmo pulo** — nenhum personagem fica travado em nenhuma fase. O que muda entre
+eles é a aparência e o que cada um coleta.
+
+| Habilidade | Como usar |
 |---|---|
-| **Lula** | **Planar e escalar** paredes |
-| **Bolsonaro** | O mais rápido. Spin Dash + **Drop Dash** (segure o pulo no ar) |
-| **Alexandre de Morais** | **Pisão**: mergulha no chão, quebra blocos e solta onda de choque |
-| **Renan Santos** | **Impulso aéreo**: aperte o pulo de novo no ar e continue apertando |
+| **Voar** | Aperte o pulo de novo no ar (e vá apertando para subir) |
+| **Drop Dash** | Segure o pulo depois de saltar e caia rolando em alta velocidade |
+| **Pisão** | Seta para baixo + pulo no ar: mergulha, quebra blocos e solta onda de choque |
+| **Planar / Escalar** | X no ar; ao encostar numa parede, sobe por ela |
+| **Spin Dash** | Baixo + pulo no chão, soltando o baixo para disparar |
+
+| Personagem | Coleta |
+|---|---|
+| **Lula** | Picanhas |
+| **Bolsonaro** | Pílulas azuis |
+| **Alexandre de Morais** | Maços de dinheiro |
+| **Renan Santos** | Anéis dourados |
 
 Qualquer um quebra os blocos `X` rolando neles em velocidade.
 
-Cada personagem coleta uma coisa diferente no lugar dos anéis, e o HUD muda
-junto: **Lula** junta picanhas, **Bolsonaro** junta pílulas azuis,
-**Alexandre de Morais** junta maços de dinheiro e **Renan Santos** mantém os
-anéis dourados. Vale para a fase, a fase especial e o monitor de item.
+O coletável de cada um vale na fase, na fase especial e no monitor de item, e o
+HUD muda junto (PICANHAS, PILULAS, DINHEIRO ou ANEIS).
 
 As vozes ficam em `audio/` (`lula.mp3`, `bolsonaro.mp3`, `alexandre.mp3`,
 `renan.mp3`), junto do tema do chefe (`boss-daniel.mp3`) — troque os arquivos mantendo os nomes para mudar as falas.
