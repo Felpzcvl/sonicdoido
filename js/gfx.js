@@ -2394,30 +2394,33 @@
     return !!(i && i.complete && i.naturalWidth > 0);
   };
 
-  /* fundo preenchendo a tela + a arte inteira por cima */
-  Gfx.drawCapa = function (ctx, topo) {
+  /* A arte cobre a tela inteira, sem borda. Um pan lento na horizontal
+     mostra as pontas que ficariam cortadas, e um zoom suave da o respiro. */
+  Gfx.drawCapa = function (ctx, t) {
     var img = Gfx.capa;
-    if (!Gfx.capaPronta()) return 0;
+    if (!Gfx.capaPronta()) return false;
     var iw = img.naturalWidth, ih = img.naturalHeight;
 
-    ctx.save();
-    var sc = Math.max(S.W / iw, S.H / ih);
+    var zoom = 1 + Math.sin(t * .006) * .03;
+    var sc = Math.max(S.W / iw, S.H / ih) * zoom;
     var w = iw * sc, h = ih * sc;
-    ctx.globalAlpha = .5;
-    ctx.drawImage(img, (S.W - w) / 2, (S.H - h) / 2, w, h);
-    ctx.restore();
-    ctx.save();
-    ctx.fillStyle = 'rgba(6,10,26,.5)';
-    ctx.fillRect(0, 0, S.W, S.H);
-    ctx.restore();
+    var folgaX = Math.max(0, w - S.W);
+    var folgaY = Math.max(0, h - S.H);
+    var px = -folgaX * (.5 + .5 * Math.sin(t * .0045));
+    var py = -folgaY * .5;
 
-    var bh = Math.round(ih * (S.W / iw));
-    ctx.drawImage(img, 0, topo, S.W, bh);
+    ctx.drawImage(img, px, py, w, h);
+    return true;
+  };
+
+  /* faixa escura na base so para o texto ficar legivel */
+  Gfx.capaScrim = function (ctx, topo) {
+    var g = ctx.createLinearGradient(0, topo, 0, S.H);
+    g.addColorStop(0, 'rgba(4,8,22,0)');
+    g.addColorStop(1, 'rgba(4,8,22,.62)');
     ctx.save();
-    ctx.strokeStyle = 'rgba(0,0,0,.55)';
-    ctx.lineWidth = 2;
-    ctx.strokeRect(0, topo, S.W, bh);
+    ctx.fillStyle = g;
+    ctx.fillRect(0, topo, S.W, S.H - topo);
     ctx.restore();
-    return bh;
   };
 })();
