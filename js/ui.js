@@ -72,16 +72,16 @@
     ctx.scale(scale, scale);
     var bob = Math.sin(t * .04) * 2;
 
-    S.text(ctx, 'SONIC', 0, bob, {
+    S.text(ctx, 'BRASIL', 0, bob, {
       size: 62, align: 'center', weight: '900',
-      gradient: ['#8fd6ff', '#1c6fd6'],
-      outline: '#0b1a3a', outlineW: 9, shadow: false
+      gradient: ['#9bef7a', '#0f8a3c'],
+      outline: '#06381a', outlineW: 9, shadow: false
     });
-    S.text(ctx, 'SONIC', 0, bob, {
+    S.text(ctx, 'BRASIL', 0, bob, {
       size: 62, align: 'center', weight: '900',
       color: 'rgba(255,255,255,.14)', shadow: false
     });
-    S.text(ctx, 'EMERALD RUSH', 0, 30 + bob, {
+    S.text(ctx, 'ELEIÇÃO RUSH', 0, 30 + bob, {
       size: 21, align: 'center', weight: 'bold',
       color: '#ffd23c', outline: '#5a2a00', outlineW: 5, shadow: false, letterSpacing: '3px'
     });

@@ -151,4 +151,5 @@ de ASCII) e adicione o nome dele na lista `chunks` de um ato em `js/levels.js`.
 
 ---
 
-Sonic é um personagem da SEGA. Este é um projeto educacional, sem fins lucrativos.
+Os personagens são caricaturas de figuras públicas, em tom de sátira. Projeto
+educacional, sem fins lucrativos.

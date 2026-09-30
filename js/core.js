@@ -1,5 +1,5 @@
 /* ============================================================
-   SONIC — EMERALD RUSH
+   BRASIL — ELEIÇÃO RUSH
    core.js — namespace, math helpers, drawing helpers
    ============================================================ */
 (function () {

@@ -438,7 +438,7 @@
   Sc.credits = {
     enter: function (g) { this.t = 0; this.scroll = 0; },
     lines: [
-      ['SONIC — EMERALD RUSH', 22, '#ffd23c'],
+      ['BRASIL — ELEIÇÃO RUSH', 22, '#ffd23c'],
       ['', 10, '#ffffff'],
       ['Um jogo de plataforma em HTML5 Canvas', 13, '#e6ecff'],
       ['', 14, '#ffffff'],
@@ -459,7 +459,7 @@
       ['AGRADECIMENTOS', 14, '#9fe2ff'],
       ['A voce, por jogar ate aqui!', 12, '#e6ecff'],
       ['', 20, '#ffffff'],
-      ['Sonic e um personagem da SEGA.', 11, '#9fb0cc'],
+      ['Caricaturas de figuras publicas, em tom de satira.', 11, '#9fb0cc'],
       ['Projeto educacional sem fins lucrativos.', 11, '#9fb0cc']
     ],
     update: function (g) {
