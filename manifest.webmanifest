@@ -1,0 +1,17 @@
+{
+  "name": "Brasil — Eleição Rush",
+  "short_name": "Eleição Rush",
+  "description": "Jogo de plataforma 2D em HTML5 com Lula, Bolsonaro, Alexandre de Morais e Renan Santos.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#05060c",
+  "theme_color": "#0b1030",
+  "lang": "pt-BR",
+  "icons": [
+    { "src": "assets/icone-32.png", "sizes": "32x32", "type": "image/png" },
+    { "src": "assets/icone-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "assets/icone-256.png", "sizes": "256x256", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

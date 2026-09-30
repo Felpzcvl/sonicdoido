@@ -5,7 +5,8 @@ const types = {
   '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
   '.css': 'text/css; charset=utf-8', '.json': 'application/json',
   '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.ico': 'image/x-icon',
-  '.mp3': 'audio/mpeg', '.mpeg': 'audio/mpeg', '.ogg': 'audio/ogg', '.wav': 'audio/wav'
+  '.mp3': 'audio/mpeg', '.mpeg': 'audio/mpeg', '.ogg': 'audio/ogg', '.wav': 'audio/wav',
+  '.webp': 'image/webp', '.webmanifest': 'application/manifest+json'
 };
 const port = process.env.PORT || 7788;
 http.createServer((req, res) => {
