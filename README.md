@@ -2,25 +2,33 @@
 ![BRASIL ELEIÇÃO RUSH](assets/capa.webp)
 
 Um jogo de plataforma completo no estilo dos clássicos de 16 bits, feito **100% em
-HTML5 + Canvas + JavaScript puro**. Sem engine, sem build, sem dependências:
-é só abrir o `index.html` no navegador.
+HTML5 + Canvas + JavaScript puro**. Sem engine, sem build e sem dependências.
 
-Todos os gráficos são desenhados por código (vetorial, em tempo real) e toda a
-trilha sonora e os efeitos são sintetizados via **WebAudio** — o projeto não usa
-nenhum arquivo de imagem ou áudio.
+Todo o cenário, os personagens e os inimigos são desenhados por código, em tempo
+real, e a trilha sonora e os efeitos são sintetizados via **WebAudio**. Os únicos
+arquivos externos são a arte de capa (`assets/`) e as falas dos personagens
+(`audio/`).
 
 ---
 
 ## Como jogar
 
-Abra `index.html` no navegador.
-Se o navegador bloquear os scripts locais, rode um servidor simples:
+**Jogue direto no navegador:** <https://sonicdoido.vercel.app/>
+
+Não precisa instalar nada, nem criar conta. Funciona em computador (teclado ou
+controle) e em celular e tablet (botões na tela).
+
+<details>
+<summary>Rodar a partir do código</summary>
+
+Abra `index.html` no navegador. Se ele bloquear os scripts locais, suba um
+servidor simples e acesse o endereço que ele mostrar:
 
 ```bash
 node serve.js
 ```
 
-E acesse <http://localhost:7788>.
+</details>
 
 ### Controles
 
