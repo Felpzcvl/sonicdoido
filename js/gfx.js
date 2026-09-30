@@ -2394,22 +2394,18 @@
     return !!(i && i.complete && i.naturalWidth > 0);
   };
 
-  /* A arte cobre a tela inteira, sem borda. Um pan lento na horizontal
-     mostra as pontas que ficariam cortadas, e um zoom suave da o respiro. */
-  Gfx.drawCapa = function (ctx, t) {
+  /* A arte cobre a tela inteira, sem borda e sem movimento.
+     CAPA_FOCO escolhe que parte fica visivel quando sobra largura:
+     0 = encosta na esquerda, 1 = na direita. */
+  Gfx.CAPA_FOCO = .72;
+
+  Gfx.drawCapa = function (ctx) {
     var img = Gfx.capa;
     if (!Gfx.capaPronta()) return false;
     var iw = img.naturalWidth, ih = img.naturalHeight;
-
-    var zoom = 1 + Math.sin(t * .006) * .03;
-    var sc = Math.max(S.W / iw, S.H / ih) * zoom;
+    var sc = Math.max(S.W / iw, S.H / ih);
     var w = iw * sc, h = ih * sc;
-    var folgaX = Math.max(0, w - S.W);
-    var folgaY = Math.max(0, h - S.H);
-    var px = -folgaX * (.5 + .5 * Math.sin(t * .0045));
-    var py = -folgaY * .5;
-
-    ctx.drawImage(img, px, py, w, h);
+    ctx.drawImage(img, -(w - S.W) * Gfx.CAPA_FOCO, -(h - S.H) * .5, w, h);
     return true;
   };
 
@@ -2417,7 +2413,7 @@
   Gfx.capaScrim = function (ctx, topo) {
     var g = ctx.createLinearGradient(0, topo, 0, S.H);
     g.addColorStop(0, 'rgba(4,8,22,0)');
-    g.addColorStop(1, 'rgba(4,8,22,.62)');
+    g.addColorStop(1, 'rgba(4,8,22,.78)');
     ctx.save();
     ctx.fillStyle = g;
     ctx.fillRect(0, topo, S.W, S.H - topo);
