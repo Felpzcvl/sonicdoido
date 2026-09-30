@@ -808,9 +808,9 @@
         size: 30, align: 'center', color: '#ffd23c', outline: '#3a1d00', outlineW: 6, shadow: false });
 
       var msg = this.good
-        ? ['Com as seis Esmeraldas do Caos reunidas,', 'a fortaleza do Eggman desabou no mar.',
-           'A paz voltou as colinas esmeralda.']
-        : ['O Eggman fugiu, mas os animais estao livres!', 'Algumas Esmeraldas do Caos ainda estao por ai...',
+        ? ['Com as seis Esmeraldas do Caos reunidas,', 'a nave de Daniel Vocaro caiu na praca',
+           'e o Banco Master fechou as portas de vez.']
+        : ['Daniel Vocaro escapou na ultima hora!', 'Algumas Esmeraldas do Caos ainda estao por ai...',
            'Tente de novo para ver o final verdadeiro.'];
       for (var i = 0; i < msg.length; i++) {
         S.text(ctx, msg[i], S.W / 2, 104 + i * 24, {

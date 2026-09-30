@@ -121,7 +121,7 @@ js/chunks.js        blocos de cenário em ASCII
 js/level.js         montagem do mapa, colisão e pré-renderização
 js/levels.js        zonas e atos
 js/entities.js      anéis, itens, molas e badniks
-js/boss.js          Dr. Eggman e suas máquinas
+js/boss.js          Daniel Vocaro e suas máquinas
 js/player.js        física do jogador e habilidades
 js/hud.js           interface da fase
 js/ui.js            componentes de menu

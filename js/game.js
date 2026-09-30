@@ -267,7 +267,7 @@
       this.bossActive = false;
       this.bankMode = false;
       S.Audio.stopBossTheme();
-      S.Particles.popup(this.player.x, this.player.y - 60, 'EGGMAN DERROTADO!', '#ffd23c');
+      S.Particles.popup(this.player.x, this.player.y - 60, 'DANIEL VOCARO DERROTADO!', '#ffd23c');
       this.restoreMusic();
     };
 

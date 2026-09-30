@@ -49,7 +49,7 @@
     },
     {
       id: 'z3a2', zone: 2, act: 2, name: 'SUPREMO TRIBUNAL — ATO FINAL', emerald: 5,
-      time: 36000, theme: 'stf', boss: { type: 'egglaser', hits: 10 },
+      time: 36000, theme: 'stf', boss: { type: 'masterlaser', hits: 10 },
       chunks: ['start', 'spikepit', 'sky', 'tunnel', 'badniks', 'check',
                'stairs', 'gap', 'bounce', 'xblocks', 'ringroom',
                'arenaIn', 'arena', 'arena', 'goal']

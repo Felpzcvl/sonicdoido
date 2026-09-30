@@ -1,5 +1,5 @@
 /* ============================================================
-   boss.js — o Dr. Eggman e suas máquinas
+   boss.js — Daniel Vocaro e suas máquinas
    ============================================================ */
 (function () {
   'use strict';
@@ -7,7 +7,7 @@
   var Gfx = S.Gfx;
 
   /* Daniel Vocaro pilotando a nave do Banco Master */
-  Gfx.eggmobile = function (ctx, x, y, t, hurt, face) {
+  Gfx.bossPod = function (ctx, x, y, t, hurt, face) {
     ctx.save();
     ctx.translate(x, y);
     ctx.scale(face < 0 ? -1 : 1, 1);
@@ -334,7 +334,7 @@
         S.Gfx.wreckingBall(ctx, this.bx - cam.x, this.by - cam.y, this.t);
       }
       if (this.type === 'driller') S.Gfx.drill(ctx, x, y + 18, this.t);
-      if (this.type === 'egglaser') {
+      if (this.type === 'masterlaser') {
         S.Gfx.laserArm(ctx, x, y + 16, this.t, this.sub === 'charge');
         if (this.beam) {
           ctx.save();
@@ -346,7 +346,7 @@
           ctx.restore();
         }
       }
-      S.Gfx.eggmobile(ctx, x, y, this.t, this.invuln > 0, this.face);
+      S.Gfx.bossPod(ctx, x, y, this.t, this.invuln > 0, this.face);
     };
     return e;
   };
